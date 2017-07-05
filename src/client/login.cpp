@@ -9,7 +9,7 @@
 
 #include "management.h"
 
-using Connor_Socket::Server;
+using Connor_Socket::Client;
 using json = nlohmann::json;
 
 Widget::Widget(QWidget *parent) :
