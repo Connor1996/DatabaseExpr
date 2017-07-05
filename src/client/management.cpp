@@ -1,7 +1,6 @@
 ﻿#include "management.h"
 #include "ui_management.h"
 
-
 #include "src/include/json.hpp"
 #include "src/protocol.h"
 
@@ -10,6 +9,9 @@
 #include <QGraphicsView>
 #include <QStandardItem>
 #include <QTableView>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QtCharts>
 
 using Connor_Socket::Client;
 using json = nlohmann::json;
@@ -51,11 +53,15 @@ void Management::InitConnect() {
     });
 
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
-
+        _ShowGraph([](){
+            return std::vector<std::vector<std::string>>{};
+        });
     });
 
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
-
+        _ShowGraph([](){
+            return std::vector<std::vector<std::string>>{};
+        });
     });
 }
 
@@ -95,8 +101,48 @@ void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(
 }
 
 
-void Management::_ShowGraph(std::function<std::vector<std::vector<std::string>>(void)> fn) {
+void Management::_ShowGraph(std::function<std::vector<std::vector<std::string>>(void)> fn)
+{
+    const auto& result = fn();
+    if (result.size() == 0)
+        return;
 
+    // 判断是否已经有widget，有则删除
+    if(ui->scrollArea->widget() != 0)
+        delete ui->scrollArea->widget();
+
+    //page2 折线图
+    auto linescene = new QGraphicsScene();
+    auto lineview = new QGraphicsView();
+    lineview->setScene(linescene);
+    lineview->setRenderHint(QPainter::Antialiasing);
+    linescene->setBackgroundBrush(QBrush(QColor(240, 240, 240)));
+    lineview->setSceneRect(10, 10,560, 300);
+    lineview->setSizeIncrement(560,300);
+    lineview->resizeAnchor();
+
+    QCategoryAxis *axisX = new QCategoryAxis();
+    QCategoryAxis *axisY = new QCategoryAxis();
+    //axisY->setRange(0,6);
+    axisX->setRange(0,7);
+
+
+    // 构建 series，作为图表的数据源
+    auto lineseries = new QLineSeries();
+    lineseries->append(0, 0);
+    lineseries->append(1, 2);
+    auto lineChart = new QChart();
+    lineChart->addSeries(lineseries);  // 将 series 添加至图表中
+    lineChart->setAxisX(axisX, lineseries);
+    lineChart->setAxisY(axisY, lineseries);
+
+    lineChart->legend()->hide();
+    lineChart->createDefaultAxes();
+    lineChart->setTitle("Week Line Chart");
+    lineChart->setGeometry(10, 10, 560, 300);
+    linescene->addItem(lineChart);
+
+    ui->scrollArea->setWidget(lineview);
 }
 
 

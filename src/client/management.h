@@ -27,6 +27,8 @@ private:
     void InitWidget();
     void InitConnect();
 
+    void _ShowTable(std::function<std::vector<std::vector<std::string>>(void)>);
+    void _ShowGraph(std::function<std::vector<std::vector<std::string>>(void)>);
 
     Ui::Management *ui;
 
