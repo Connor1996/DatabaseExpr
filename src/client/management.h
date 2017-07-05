@@ -27,6 +27,7 @@ private:
     void InitWidget();
     void InitConnect();
 
+
     Ui::Management *ui;
 
     // server socket对象

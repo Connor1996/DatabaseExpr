@@ -236,7 +236,7 @@ QComboBox::down-arrow {
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="checkInButton">
+                  <widget class="QPushButton" name="sectorQuery">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -365,7 +365,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="checkInButton_2">
+                  <widget class="QPushButton" name="eNodeQuery">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -461,6 +461,50 @@ QComboBox::down-arrow {
                 </layout>
                </item>
                <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_21">
+                 <property name="spacing">
+                  <number>7</number>
+                 </property>
+                 <property name="sizeConstraint">
+                  <enum>QLayout::SetMinAndMaxSize</enum>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>起始时间</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="startDate_KPI">
+                   <property name="dateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2016</year>
+                     <month>7</month>
+                     <day>17</day>
+                    </datetime>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_20">
                  <property name="spacing">
                   <number>7</number>
@@ -468,6 +512,27 @@ QComboBox::down-arrow {
                  <property name="sizeConstraint">
                   <enum>QLayout::SetMinAndMaxSize</enum>
                  </property>
+                 <item>
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>截至时间</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="endDate_KPI">
+                   <property name="dateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2016</year>
+                     <month>7</month>
+                     <day>19</day>
+                    </datetime>
+                   </property>
+                  </widget>
+                 </item>
                  <item>
                   <spacer name="horizontalSpacer_5">
                    <property name="orientation">
@@ -482,7 +547,7 @@ QComboBox::down-arrow {
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="checkInButton_5">
+                  <widget class="QPushButton" name="KPIQuery">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -578,6 +643,50 @@ QComboBox::down-arrow {
                 </layout>
                </item>
                <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_22">
+                 <property name="spacing">
+                  <number>7</number>
+                 </property>
+                 <property name="sizeConstraint">
+                  <enum>QLayout::SetMinAndMaxSize</enum>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_13">
+                   <property name="text">
+                    <string>起始时间</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="startDate_PRB">
+                   <property name="dateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2016</year>
+                     <month>7</month>
+                     <day>17</day>
+                    </datetime>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_23">
                  <property name="spacing">
                   <number>7</number>
@@ -585,6 +694,27 @@ QComboBox::down-arrow {
                  <property name="sizeConstraint">
                   <enum>QLayout::SetMinAndMaxSize</enum>
                  </property>
+                 <item>
+                  <widget class="QLabel" name="label_14">
+                   <property name="text">
+                    <string>截至时间</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDateEdit" name="endDate_PRB">
+                   <property name="dateTime">
+                    <datetime>
+                     <hour>0</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                     <year>2016</year>
+                     <month>7</month>
+                     <day>19</day>
+                    </datetime>
+                   </property>
+                  </widget>
+                 </item>
                  <item>
                   <spacer name="horizontalSpacer_8">
                    <property name="orientation">
@@ -599,7 +729,7 @@ QComboBox::down-arrow {
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="checkInButton_6">
+                  <widget class="QPushButton" name="PRBQuery">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -649,22 +779,71 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
     </spacer>
    </item>
    <item>
-    <widget class="QFrame" name="gridFrame">
+    <widget class="QScrollArea" name="scrollArea">
      <property name="styleSheet">
-      <string notr="true">#gridFrame{
-
-background-color: rgb(255, 255, 255);
+      <string notr="true">#scrollArea{
 	border:2px solid #111;
 	border-radius:10px;
-
+padding: 5px;
 }
-</string>
+
+QScrollBar
+{
+    width:8px;
+    background:rgba(0,0,0,0%);
+    margin:0px,0px,0px,0px;
+    padding-top:9px;  
+    padding-bottom:9px;
+}
+QScrollBar::handle
+{
+    width:8px;
+    background:rgba(0,0,0,25%);
+    border-radius:4px;  
+    min-height:20;
+}
+QScrollBar::handle:hover
+{
+    width:8px;
+    background:rgba(0,0,0,50%);   
+    border-radius:4px;
+    min-height:20;
+}
+
+QScrollBar::add-page,QScrollBar::sub-page  
+{
+    background:rgba(0,0,0,10%);
+    border-radius:4px;
+}
+QScrollBar::add-line {
+      border: 10px;
+      background: none;
+}
+
+QScrollBar::sub-line {
+      border: none;
+      background: none;
+}</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <item>
-       <widget class="QColumnView" name="columnView"/>
-      </item>
-     </layout>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>712</width>
+        <height>716</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>
