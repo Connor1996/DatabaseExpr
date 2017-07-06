@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <QtSql/QSqlDatabase>
 
 using std::string;
 using std::vector;
@@ -16,6 +17,10 @@ public:
 
     ~Dispatcher();
 
+    QSqlDatabase db;
+
+    void connect_database();
+    //连接数据库
     vector<vector<string>> KPIHandler();
     // tbCell导入
     bool ImportCell(string filePath);
