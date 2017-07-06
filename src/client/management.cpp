@@ -54,13 +54,13 @@ void Management::InitConnect() {
 
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
         _ShowGraph([](){
-            return std::vector<std::vector<std::string>>{};
+            return std::vector<std::vector<std::string>>{{"S", "d"}, {"张博康", "sdaasd"}};
         });
     });
 
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
         _ShowGraph([](){
-            return std::vector<std::vector<std::string>>{};
+            return std::vector<std::vector<std::string>>{{"s", "s"}};
         });
     });
 }

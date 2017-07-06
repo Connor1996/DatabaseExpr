@@ -1,13 +1,16 @@
-﻿#include "login.h"
-#include <QApplication>
+﻿#include <iostream>
+#include "server.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setFont(QFont("Microsoft Yahei", 10));
-    Widget* w(new Widget());
-
-    w->show();
-
-    return a.exec();
+    std::cout << "this is server" << std::endl;
+    try
+    {
+        Connor_Socket::Server server;
+        server.Start();
+    }
+    catch (std::exception e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }

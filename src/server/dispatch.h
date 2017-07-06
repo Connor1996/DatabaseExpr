@@ -22,7 +22,7 @@ public:
     //      connection  与相应客户端建立的socket连接
     //      parent      server对象指针
     Dispatcher(SOCKET &connection, Connor_Socket::Server *server)
-        : _connection(connection), _server(server)
+        : _connection(connection)
     { }
 
     ~Dispatcher();
@@ -35,6 +35,7 @@ public:
     std::string Dispatch(json requestInfo);
 
 
+    json KPIHandler(json requestInfo);
 private:
     // 与dispatcher绑定的socket连接
     SOCKET _connection;
