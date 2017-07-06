@@ -1,14 +1,11 @@
 ﻿#ifndef MANAGEMENT_H
 #define MANAGEMENT_H
 
-#include "client.h"
-
-
 #include <QWidget>
 #include <QLabel>
 
 #include <unordered_map>
-
+#include <functional>
 
 namespace Ui {
 class Management;
@@ -31,9 +28,6 @@ private:
     void _ShowGraph(std::function<std::vector<std::vector<std::string>>(void)>);
 
     Ui::Management *ui;
-
-    // server socket对象
-    Connor_Socket::Client *_client;
 
 };
 

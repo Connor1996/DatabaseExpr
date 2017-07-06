@@ -1,5 +1,6 @@
 ﻿#include "login.h"
 #include "ui_login.h"
+
 #include <QMessageBox>
 #include <QPainter>
 #include <QBrush>
@@ -44,7 +45,7 @@ void Widget::Login()
         QMessageBox::information(this, "info", "password not filled");
     } else if (username == "admin" && password == "admin"){
         this->close();
-        window = new Lobby();
+        window = new Management();
         window->show();
     } else {
         QMessageBox::information(this, "info", "wrong password");

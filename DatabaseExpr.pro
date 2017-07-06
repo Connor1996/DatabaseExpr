@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-04-29T23:05:00
+# Project created by QtCreator 2017-07-05T23:05:00
 #
 #-------------------------------------------------
 
@@ -19,25 +19,23 @@ debug {
   DEFINES += __DEBUG__
 }
 
-HEADERS +=
-
 
 UI_DIR = ./ui
 
-DEFINES += __CLIENT__
-
 SOURCES += \
-    src/client/main.cpp \
-    src/client/login.cpp \
-    src/client/management.cpp
+    src/main.cpp \
+    src/login.cpp \
+    src/management.cpp \
+    src/dispatch.cpp
 
 HEADERS += \
-    src/client/login.h \
-    src/client/management.h
+    src/login.h \
+    src/management.h \
+    src/dispatch.h
 
 FORMS    += \
-    src/client/login.ui \
-    src/client/management.ui
+    src/login.ui \
+    src/management.ui
 
 
 

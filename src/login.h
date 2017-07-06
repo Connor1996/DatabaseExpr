@@ -2,7 +2,6 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include "client.h"
 #include "management.h"
 
 namespace Ui {
