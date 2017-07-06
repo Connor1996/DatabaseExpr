@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -794,7 +794,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_2">
+                 <widget class="QLineEdit" name="sectorIdEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -959,7 +959,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_3">
+                 <widget class="QLineEdit" name="nodeIdEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1853,7 +1853,6 @@ QScrollBar::sub-line {
         <height>758</height>
        </rect>
       </property>
-      <zorder>tabWidget</zorder>
      </widget>
     </widget>
    </item>

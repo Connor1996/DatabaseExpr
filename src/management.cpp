@@ -35,13 +35,13 @@ void Management::InitWidget() {
 void Management::InitConnect() {
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
         _ShowTable([this](){
-            return _dispatcher.SectorInfoQuery();
+            return _dispatcher.SectorInfoQuery(ui->sectorIdEdit->text());
         });
     });
 
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
         _ShowTable([this](){
-            return _dispatcher.NodeInfoQuery();
+            return _dispatcher.NodeInfoQuery(ui->nodeIdEdit->text());
         });
     });
 
@@ -58,7 +58,7 @@ void Management::InitConnect() {
     });
 }
 
-void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(void)> fn)
+void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
     if (result.size() == 0)
@@ -79,14 +79,14 @@ void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(
 
     QStandardItemModel *model = new QStandardItemModel();
     for (int i = 0; i < cnt; i++) {
-        model->setHorizontalHeaderItem(i, new QStandardItem(QString::fromStdString(result[0][i])));
+        model->setHorizontalHeaderItem(i, new QStandardItem(result[0][i]));
     }
 
     tableView->setModel(model);
     //利用setModel()方法将数据模型与QTableView绑定
     for (int i = 0; i < result.size(); i++) {
         for (int j = 0; j < cnt; j++) {
-            model->setItem(i, j, new QStandardItem(QString::fromStdString(result[i][j])));
+            model->setItem(i, j, new QStandardItem(result[i][j]));
         }
     }
 
@@ -94,7 +94,7 @@ void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(
 }
 
 
-void Management::_ShowGraph(std::function<std::vector<std::vector<std::string>>(void)> fn)
+void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
     if (result.size() == 0)

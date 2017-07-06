@@ -2,12 +2,12 @@
 #define DISPATCH_H
 
 #include <vector>
-#include <string>
+#include <QString>
+#include <functional>
 #include <QtSql/QSqlDatabase>
 
-using std::string;
 using std::vector;
-
+using std::function;
 
 class Dispatcher
 {
@@ -21,33 +21,33 @@ public:
 
     void connect_database();
     //连接数据库
-    vector<vector<string>> KPIHandler();
+    vector<vector<QString>> KPIHandler();
     // tbCell导入
-    bool ImportCell(string filePath);
+    bool ImportCell(QString filePath);
 
     // tbKPI导入
-    bool ImportKPI(string filePath);
+    bool ImportKPI(QString filePath);
 
     // tbPRB导入
-    bool ImportPRB(string filePath);
+    bool ImportPRB(QString filePath);
 
     // tbMROData导入
-    bool ImportMRO(string filePath);
+    bool ImportMRO(QString filePath);
 
     // 导出给定表
-    bool ExportTable(string tableName, string filePath);
+    bool ExportTable(QString tableName, QString filePath);
 
     // 小区配置信息查询
-    vector<vector<string>> SectorInfoQuery();
+    vector<vector<QString>> SectorInfoQuery(QString);
 
     // 基站eNodeB信息查询
-    vector<vector<string>> NodeInfoQuery();
+    vector<vector<QString>> NodeInfoQuery(QString);
 
     // KPI指标信息查询
-    vector<vector<string>> KPIQuery();
+    vector<vector<QString>> KPIQuery();
 
     // PRB信息统计与查询
-    vector<vector<string>> PRBQuery();
+    vector<vector<QString>> PRBQuery();
 
 };
 

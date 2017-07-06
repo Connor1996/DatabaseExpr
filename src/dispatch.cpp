@@ -46,7 +46,7 @@ void Dispatcher::connect_database()
 }
 
 // tbCell导入
-bool Dispatcher::ImportCell(string filePath)
+bool Dispatcher::ImportCell(QString filePath)
 {
     // todo
     return true;
@@ -54,7 +54,7 @@ bool Dispatcher::ImportCell(string filePath)
 
 
 // tbKPI导入
-bool Dispatcher::ImportKPI(string filePath)
+bool Dispatcher::ImportKPI(QString filePath)
 {
     // todo
     return true;
@@ -62,7 +62,7 @@ bool Dispatcher::ImportKPI(string filePath)
 
 
 // tbPRB导入
-bool Dispatcher::ImportPRB(string filePath)
+bool Dispatcher::ImportPRB(QString filePath)
 {
     // todo
     return true;
@@ -70,7 +70,7 @@ bool Dispatcher::ImportPRB(string filePath)
 
 
 // tbMROData导入
-bool Dispatcher::ImportMRO(string filePath)
+bool Dispatcher::ImportMRO(QString filePath)
 {
     // todo
     return true;
@@ -78,28 +78,26 @@ bool Dispatcher::ImportMRO(string filePath)
 
 
 // 导出给定表
-bool Dispatcher::ExportTable(string tableName, string filePath)
+bool Dispatcher::ExportTable(QString tableName, QString filePath)
 {
     // todo
     return true;
 }
 
 // 小区配置信息查询
-vector<vector<string>> Dispatcher::SectorInfoQuery()
+vector<vector<QString>> Dispatcher::SectorInfoQuery(QString sectorId)
 {
-    vector<vector<string>> result;
+    vector<vector<QString>> result;
     QSqlQuery query(db);
-    QString sector_id="11317-128";
     QString sql = QString("select * from tbCell where SECTOR_ID = '%1'")
-            .arg(sector_id);
+            .arg(sectorId);
     query.exec(sql);
 
     int size = query.record().count();
     if(query.first()){
-        vector<string> item;
+        vector<QString> item;
         for (int i = 0; i < size; i++){
-            //item.push_back(query.value(i).toString());
-            //qDebug() << query.value(i).toString();
+            item.push_back(query.value(i).toString());
         }
         result.push_back(item);
     }
@@ -107,17 +105,17 @@ vector<vector<string>> Dispatcher::SectorInfoQuery()
 }
 
 // 基站eNodeB信息查询
-vector<vector<string>> Dispatcher::NodeInfoQuery()
+vector<vector<QString>> Dispatcher::NodeInfoQuery(QString nodeId)
 {
-    vector<vector<string>> result;
+    vector<vector<QString>> result;
 
     return result;
 }
 
 // KPI指标信息查询
-vector<vector<string>> Dispatcher::KPIQuery()
+vector<vector<QString>> Dispatcher::KPIQuery()
 {
-    vector<vector<string>> result;
+    vector<vector<QString>> result;
 
     // ODBC
     // ...
@@ -131,9 +129,9 @@ vector<vector<string>> Dispatcher::KPIQuery()
 }
 
 // PRB信息统计与查询
-vector<vector<string>> Dispatcher::PRBQuery()
+vector<vector<QString>> Dispatcher::PRBQuery()
 {
-    vector<vector<string>> result;
+    vector<vector<QString>> result;
 
     return result;
 }
