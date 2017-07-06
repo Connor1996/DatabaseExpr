@@ -34,32 +34,32 @@ void Management::InitWidget() {
 
 void Management::InitConnect() {
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
-        _ShowTable([](){
-            return std::vector<std::vector<std::string>>{{"S", "d"}, {"张博康", "sdaasd"}};
+        _ShowTable([this](){
+            return _dispatcher.SectorInfoQuery();
         });
     });
 
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
-        _ShowTable([](){
-            return std::vector<std::vector<std::string>>{};
+        _ShowTable([this](){
+            return _dispatcher.NodeInfoQuery();
         });
     });
 
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
-        _ShowGraph([](){
-            return std::vector<std::vector<std::string>>{{"S", "d"}, {"张博康", "sdaasd"}};
+        _ShowGraph([this](){
+            return _dispatcher.KPIQuery();
         });
     });
 
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
-        _ShowGraph([](){
-            return std::vector<std::vector<std::string>>{{"s", "s"}};
+        _ShowGraph([this](){
+            return _dispatcher.PRBQuery();
         });
     });
 }
 
-void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(void)> fn) {
-
+void Management::_ShowTable(std::function<std::vector<std::vector<std::string>>(void)> fn)
+{
     const auto& result = fn();
     if (result.size() == 0)
         return;

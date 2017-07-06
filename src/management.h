@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <functional>
 
+#include "dispatch.h"
+
 namespace Ui {
 class Management;
 }
@@ -28,6 +30,8 @@ private:
     void _ShowGraph(std::function<std::vector<std::vector<std::string>>(void)>);
 
     Ui::Management *ui;
+
+    Dispatcher _dispatcher;
 
 };
 
