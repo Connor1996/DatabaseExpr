@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-
-<!-- Written by QtCreator 4.0.2, 2017-07-07T00:08:05. -->
-
+<!-- Written by QtCreator 4.0.2, 2017-07-07T00:55:16. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -338,7 +336,6 @@
     <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">5</value>
-
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>

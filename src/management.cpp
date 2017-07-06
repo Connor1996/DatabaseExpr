@@ -61,8 +61,6 @@ void Management::InitConnect() {
 void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-    if (result.size() == 0)
-        return;
 
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
@@ -84,9 +82,9 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 
     tableView->setModel(model);
     //利用setModel()方法将数据模型与QTableView绑定
-    for (int i = 0; i < result.size(); i++) {
+    for (int i = 1; i < result.size(); i++) {
         for (int j = 0; j < cnt; j++) {
-            model->setItem(i, j, new QStandardItem(result[i][j]));
+            model->setItem(i - 1, j, new QStandardItem(result[i][j]));
         }
     }
 
@@ -97,8 +95,6 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-    if (result.size() == 0)
-        return;
 
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)

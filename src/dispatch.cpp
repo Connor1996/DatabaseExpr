@@ -84,24 +84,37 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
     return true;
 }
 
-// 小区配置信息查询
-vector<vector<QString>> Dispatcher::SectorInfoQuery(QString sectorId)
+vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
     vector<vector<QString>> result;
+
     QSqlQuery query(db);
-    QString sql = QString("select * from tbCell where SECTOR_ID = '%1'")
-            .arg(sectorId);
     query.exec(sql);
 
     int size = query.record().count();
-    if(query.first()){
+
+    vector<QString> columnName;
+    for (int i = 0; i < size; i++){
+        columnName.push_back(query.record().fieldName(i));
+    }
+    result.push_back(columnName);
+    if(query.next()){
         vector<QString> item;
+
         for (int i = 0; i < size; i++){
             item.push_back(query.value(i).toString());
         }
         result.push_back(item);
     }
     return result;
+}
+
+// 小区配置信息查询
+vector<vector<QString>> Dispatcher::SectorInfoQuery(QString sectorId)
+{
+
+    return _ReadData(QString("select * from tbCell where SECTOR_ID = '%1'")
+                     .arg(sectorId));
 }
 
 // 基站eNodeB信息查询

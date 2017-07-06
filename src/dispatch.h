@@ -48,7 +48,8 @@ public:
 
     // PRB信息统计与查询
     vector<vector<QString>> PRBQuery();
-
+private:
+        vector<vector<QString>> _ReadData(QString);
 };
 
 #endif // DISPATCH_H
