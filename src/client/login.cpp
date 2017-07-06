@@ -4,13 +4,8 @@
 #include <QPainter>
 #include <QBrush>
 
-#include "src/include/json.hpp"
-#include "src/protocol.h"
-
 #include "management.h"
 
-using Connor_Socket::Client;
-using json = nlohmann::json;
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent), window(nullptr),
@@ -49,7 +44,7 @@ void Widget::Login()
         QMessageBox::information(this, "info", "password not filled");
     } else if (username == "admin" && password == "admin"){
         this->close();
-        window = new Management();
+        window = new Lobby();
         window->show();
     } else {
         QMessageBox::information(this, "info", "wrong password");

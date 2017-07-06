@@ -1,9 +1,6 @@
 ﻿#include "management.h"
 #include "ui_management.h"
 
-#include "src/include/json.hpp"
-#include "src/protocol.h"
-
 #include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QGraphicsView>
@@ -12,9 +9,6 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QtCharts>
-
-using Connor_Socket::Client;
-using json = nlohmann::json;
 
 
 Management::Management(QWidget *parent) :
@@ -35,7 +29,6 @@ Management::~Management()
 
 void Management::InitWidget() {
     this->setWindowTitle(QString::fromWCharArray(L"查询界面"));
-
 
 }
 
@@ -144,8 +137,6 @@ void Management::_ShowGraph(std::function<std::vector<std::vector<std::string>>(
 
     ui->scrollArea->setWidget(lineview);
 }
-
-
 
 
 
