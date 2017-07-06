@@ -7,6 +7,7 @@
 
 QT += core gui
 QT += charts
+QT += sql
 CONFIG += c++14
 
 
