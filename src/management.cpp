@@ -56,12 +56,32 @@ void Management::InitConnect() {
             return _dispatcher.PRBQuery();
         });
     });
+
+    connect(ui->importCell, &QPushButton::clicked, [this]() {
+        if (!_dispatcher.ImportCell(ui->importCellEdit->text()))
+            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+    });
+
+    connect(ui->importKPI, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ImportKPI(ui->importKPIEdit->text()))
+            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+    });
+
+    connect(ui->importPRB, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ImportPRB(ui->importPRBEdit->text()))
+            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+    });
+
+    connect(ui->importMRO, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
+            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+    });
 }
 
 void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-
+    ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
         delete ui->scrollArea->widget();

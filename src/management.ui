@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -110,7 +110,7 @@ QFrame{background-color: rgb(255, 255, 255);}</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_14">
+                 <widget class="QLineEdit" name="importCellEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -180,7 +180,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_8">
+                 <widget class="QPushButton" name="importCell">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -238,7 +238,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_12">
+                 <widget class="QLineEdit" name="importKPIEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -308,7 +308,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_7">
+                 <widget class="QPushButton" name="importKPI">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -436,7 +436,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_6">
+                 <widget class="QPushButton" name="importPRB">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -494,7 +494,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_8">
+                 <widget class="QLineEdit" name="importMROEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -564,7 +564,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_5">
+                 <widget class="QPushButton" name="importMRO">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -622,7 +622,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_16">
+                 <widget class="QLineEdit" name="importPRBEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1789,9 +1789,11 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
     </spacer>
    </item>
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="styleSheet">
-      <string notr="true">#scrollArea{
+    <layout class="QVBoxLayout" name="verticalLayout_9">
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="styleSheet">
+        <string notr="true">#scrollArea{
 	border:2px solid #111;
 	border-radius:10px;
 padding: 5px;
@@ -1834,27 +1836,136 @@ QScrollBar::sub-line {
       border: none;
       background: none;
 }</string>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>722</width>
-        <height>758</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>720</width>
+          <height>718</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_25">
+         <property name="text">
+          <string>查询时间：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="time">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_17">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>总行数:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="count">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_18">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="sectorQuery_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#E74C3C;}
+QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F5A996;background:#DC2D1A;}</string>
+         </property>
+         <property name="text">
+          <string>  导出查询结果  </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
