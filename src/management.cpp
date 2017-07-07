@@ -33,6 +33,11 @@ void Management::InitWidget() {
 }
 
 void Management::InitConnect() {
+
+    connect(ui->sectorQuery_8, &QPushButton::clicked, [this](){
+        return _dispatcher.ImportCell(ui->userIdEdit_14->text());
+    });
+
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
         _ShowTable([this](){
             return _dispatcher.SectorInfoQuery(ui->sectorIdEdit->text());
