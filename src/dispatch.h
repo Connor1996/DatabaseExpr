@@ -50,6 +50,7 @@ public:
     vector<vector<QString>> PRBQuery();
 private:
         vector<vector<QString>> _ReadData(QString);
+        bool _import(QString);
 };
 
 #endif // DISPATCH_H

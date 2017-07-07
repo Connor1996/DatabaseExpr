@@ -45,11 +45,29 @@ void Dispatcher::connect_database()
         qDebug() << "OK!";
 }
 
+bool Dispatcher::_import(QString sql)
+{
+    QSqlQuery query(db);
+    if(query.exec(sql))
+        qDebug() << "OK";
+
+    return true;
+}
+
 // tbCell导入
 bool Dispatcher::ImportCell(QString filePath)
 {
     // todo
-    return true;
+    QString sql;
+
+    sql = QString("select* into abc from OPENDATASOURCE('Microsoft.Ace.OLEDB.12.0',"
+
+                  "'Data Source=%1;"
+                  "Extended Properties=Excel 8.0')...[sheet1$]")
+                   .arg(filePath);
+
+    qDebug() << sql;
+    return _import(sql);
 }
 
 
