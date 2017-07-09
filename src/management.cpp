@@ -141,7 +141,7 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-
+    ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
         delete ui->scrollArea->widget();

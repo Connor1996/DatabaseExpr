@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1090,7 +1090,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="roomId_4">
+                 <widget class="QComboBox" name="NetName_KPI">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1127,8 +1127,13 @@ QComboBox::down-arrow {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>-1</number>
+                   <number>0</number>
                   </property>
+                  <item>
+                   <property name="text">
+                    <string>三门峡连霍义马高速东-HLHF</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                </layout>
@@ -1272,7 +1277,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="roomId_5">
+                 <widget class="QComboBox" name="NetName_PRB">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1309,8 +1314,13 @@ QComboBox::down-arrow {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>-1</number>
+                   <number>0</number>
                   </property>
+                  <item>
+                   <property name="text">
+                    <string>三门峡连霍义马高速东-HLHF</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                </layout>
