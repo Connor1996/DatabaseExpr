@@ -151,6 +151,7 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
+
     ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
@@ -160,35 +161,41 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     auto barScene = new QGraphicsScene();
     auto barView = new QGraphicsView();
     barView->setScene(barScene);
+
+    barView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     barView->setRenderHint(QPainter::Antialiasing);
     barScene->setBackgroundBrush(QBrush(QColor(240, 240, 240)));
-    barView->setSceneRect(10, 10,560, 300);
-    barView->setSizeIncrement(560,300);
-    barView->resizeAnchor();
+    barView->setSceneRect(10, 10,600, 600);
+    barView->setSizeIncrement(600,600);
+    //barView->resizeAnchor();
+    barView->resize(600,600);
     barView->setFrameStyle(QFrame::NoFrame);
 
 
 
-    //QCategoryAxis *axisY = new QCategoryAxis();
-    //axisY->setRange(0,6);
-    //axisX->setRange(0,7);
-
     auto barChart = new QChart();
+    barChart->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    barChart->setAnimationOptions(QChart::SeriesAnimations);
+    barChart->setGeometry(10, 10, 500, 500);
     auto axisX = new QBarCategoryAxis();
-    barChart->setAxisX(axisX);
+    auto axisY = new QValueAxis();
+
+    axisY->setRange(0.0, 0.05);
 
     auto barSeries = new QBarSeries();
     barChart->addSeries(barSeries);
-
+    barChart->setAxisY(axisY, barSeries);
+    barChart->setAxisX(axisX, barSeries);
     bool mark = true;
     //构建 series，作为图表的数据源
-    for (int i = 1; i < result[0].size(); ) {
+    for (int i = 1; i < result.size(); ) {
         auto barSet = new QBarSet(result[i][0]);
         QString pre = result[i][0];
-        while (pre == result[i][0]) {
+        while (i < result.size() && pre == result[i][0] ) {
             if (mark)
                 axisX->append(result[i][1]);
-            barSet->append(result[i][2].toInt());
+            barSet->append(result[i][2].toFloat());
+            qDebug() << result[i][2] << result[i][2].toFloat();
             i++;
         }
         mark = false;
@@ -196,7 +203,7 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     }
 
 
-    barChart->legend()->hide();
+    barChart->legend()->setAlignment(Qt::AlignBottom);
     barChart->createDefaultAxes();
     barScene->addItem(barChart);
 

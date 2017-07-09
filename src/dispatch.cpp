@@ -133,8 +133,8 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
     vector<vector<QString>> result;
 
     QSqlQuery query(db);
-    query.exec(sql);
-
+    if (!query.exec(sql))
+        qDebug() << "[ERROR]" << query.lastError().databaseText();
     int size = query.record().count();
 
     vector<QString> columnName;
@@ -142,7 +142,7 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
         columnName.push_back(query.record().fieldName(i));
     }
     result.push_back(columnName);
-    if(query.next()){
+    while(query.next()){
         vector<QString> item;
 
         for (int i = 0; i < size; i++){
@@ -168,14 +168,14 @@ vector<vector<QString>> Dispatcher::NodeInfoQuery(QString nodeId)
     return _ReadData(QString("select * from tbCell where ENODEBID = %1")
                      .arg(nodeId));
 }
-
 // KPI指标信息查询
+
 vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
 {
-    return _ReadData(QString("select 小区1, 起始时间 , [RRC连接重建比率 (%)] from tbKPI where 网元名称 = %1 and 起始时间>%2 and 起始时间<%3 order by 起始时间 asc, 小区1 asc")
+    return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [RRC连接重建比率 (%)] from tbKPI where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 起始时间 asc, 小区1 asc")
                     .arg(netName)
-                    .arg(startDate.toString("dd/MM/yyyy"))
-                    .arg(endDate.toString("dd/MM/yyyy")));
+                    .arg(startDate.toString("MM/dd/yyyy"))
+                    .arg(endDate.toString("MM/dd/yyyy")));
 }
 
 // PRB信息统计与查询
