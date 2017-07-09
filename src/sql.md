@@ -315,5 +315,73 @@ insert into tbC2I3 select sa.ServingSector as a, sb.ServingSector as b, sc.Servi
 select * from tbC2I3
 ```
 
+## 触发器
+
+### tbCell
+
+```sql
+create trigger tbCell_trigger on tbCell for insert
+as
+	declare @sid nvarchar(255), @city nvarchar(255), @sname nvarchar(255), @eid float, @ename nvarchar(255), @ear int, @pci int, @pss int, @sss int,
+	 @tac int, @vendor nvarchar(255), @long float, @lati float, @sty nvarchar(255), @azi float, @hei float, @ele float, @mec float, @tot float;
+	select @sid=SECTOR_ID, @city=CITY, @sname=SECTOR_NAME, @eid= ENODEBID, @ename=ENODEB_NAME, @ear=EARFCN, @pci=PCI, @pss=PSS, @sss=SSS, @tac=TAC, 
+	@vendor=VENDOR, @long=LONGITUDE, @lati=LATITUDE, @sty=STYLE, @azi=AZIMUTH, @hei=HEIGHT, @ele=ELECTTILT, @mec=MECHTILT, @tot=TOTLETILT from inserted;
+	if (exists(select SECTOR_ID from tbCell where SECTOR_ID = @sid))
+		update tbCell set CITY = @city, SECTOR_NAME=@sname, ENODEBID=@eid, ENODEB_NAME=@ename, 
+			EARFCN=@ear, PCI=@pci, PSS=@pss, SSS=@sss, TAC=@tac, VENDOR=@vendor,
+			LONGITUDE=@long, LATITUDE=@lati, STYLE=@sty, AZIMUTH=@azi, HEIGHT=@hei,
+			ELECTTILT=@ele, MECHTILT=@mec, TOTLETILT=@tot;
+	else
+		insert into tbCell select * from inserted;
+```
+
+### tbKPI
+
+```sql
+create trigger tbKPI_trigger on tbKPI for insert
+as
+	declare @begin nvarchar(255), @circuit float, @metaname nvarchar(255), @nbr nvarchar(255), @nbr1 nvarchar(255), @r1 float, @r2 float,
+			@r3 float, @e1 float, @e2 float, @e3 float, @e4 float, @nbrtimes float, @e5 float, @wireless float, @e6 float, @u1 float, @u2 float,
+			@wirefail float, @e7 float, @e8 float, @e9 float, @e10 float, @e11 float, @e12 float, @e13 float, @e14 float, @e15 nvarchar(255), @e16 float, @zsp1 float, @zsp2 nvarchar(255),
+			@suc float, @p1 float, @p2 float, @r4 float, @r5 float, @tg1 float, @tg2 float, @tg3 float, @tg4 float, @last1 float, @last2 float;
+	select @begin=起始时间, @circuit=周期, @metaname=网元名称, @nbr=小区, @nbr1=小区1, @r1=[RRC连接建立完成次数 (无)], @r2=[RRC连接请求次数（包括重发） (无)], @r3=[RRC建立成功率qf (%)], @e1=[E-RAB建立成功总次数 (无)], @e2=[E-RAB建立尝试总次数 (无)], @e3=[E-RAB建立成功率2 (%)], @e4=[eNodeB触发的E-RAB异常释放总次数 (无)], @nbrtimes=[小区切换出E-RAB异常释放总次数 (无)], @e5=[E-RAB掉线率(新) (%)], @wireless=[无线接通率ay (%)], @e6=[eNodeB发起的S1 RESET导致的UE Context释放次数 (无)],
+			@u1=[UE Context异常释放次数 (无)], @u2=[UE Context建立成功总次数 (无)], @wirefail=[无线掉线率 (%)], @e7=[eNodeB内异频切换出成功次数 (无)], @e8=[eNodeB内异频切换出尝试次数 (无)], @e9=[eNodeB内同频切换出成功次数 (无)], @e10=[eNodeB内同频切换出尝试次数 (无)], @e11=[eNodeB间异频切换出成功次数 (无)], @e12=[eNodeB间异频切换出尝试次数 (无)], @e13=[eNodeB间同频切换出成功次数 (无)], @e14=[eNodeB间同频切换出尝试次数 (无)], @e15=[eNB内切换成功率 (%)], @e16=[eNB间切换成功率 (%)], @zsp1=[同频切换成功率zsp (%)], @zsp2=[异频切换成功率zsp (%)], @suc=[切换成功率 (%)], @p1=[小区PDCP层所接收到的上行数据的总吞吐量 (比特)], @p2=[小区PDCP层所发送的下行数据的总吞吐量 (比特)], @r4=[RRC重建请求次数 (无)], @r5=[RRC连接重建比率 (%)], 
+			@tg1=[通过重建回源小区的eNodeB间同频切换出执行成功次数 (无)], @tg2=[通过重建回源小区的eNodeB间异频切换出执行成功次数 (无)], @tg3=[通过重建回源小区的eNodeB内同频切换出执行成功次数 (无)], @tg4=[通过重建回源小区的eNodeB内异频切换出执行成功次数 (无)], @last1=[eNB内切换出成功次数 (次)], @last2=[eNB内切换出请求次数 (次)] from inserted;
+	if (exists(select 小区 from tbKPI where 小区 = @nbr))
+		update tbKPI set 起始时间=@begin, 周期=@circuit, 网元名称=@metaname, 小区=@nbr, 小区1=@nbr1, [RRC连接建立完成次数 (无)]=@r1, [RRC连接请求次数（包括重发） (无)]=@r2, [RRC建立成功率qf (%)]=@r3, [E-RAB建立成功总次数 (无)]=@e1, [E-RAB建立尝试总次数 (无)]=@e2, [E-RAB建立成功率2 (%)]=@e3, [eNodeB触发的E-RAB异常释放总次数 (无)]=@e4, [小区切换出E-RAB异常释放总次数 (无)]=@nbrtimes, [E-RAB掉线率(新) (%)]=@e5, [无线接通率ay (%)]=@wireless, [eNodeB发起的S1 RESET导致的UE Context释放次数 (无)]=@e6,
+			[UE Context异常释放次数 (无)]=@u1, [UE Context建立成功总次数 (无)]=@u2, [无线掉线率 (%)]=@wirefail, [eNodeB内异频切换出成功次数 (无)]=@e7, [eNodeB内异频切换出尝试次数 (无)]=@e8, [eNodeB内同频切换出成功次数 (无)]=@e9, [eNodeB内同频切换出尝试次数 (无)]=@e10, [eNodeB间异频切换出成功次数 (无)]=@e11, [eNodeB间异频切换出尝试次数 (无)]=@e12, [eNodeB间同频切换出成功次数 (无)]=@e13, [eNodeB间同频切换出尝试次数 (无)]=@e14, [eNB内切换成功率 (%)]=@e15, [eNB间切换成功率 (%)]=@e16, [同频切换成功率zsp (%)]=@zsp1, [异频切换成功率zsp (%)]=@zsp2, [切换成功率 (%)]=@suc, [小区PDCP层所接收到的上行数据的总吞吐量 (比特)]=@p1, [小区PDCP层所发送的下行数据的总吞吐量 (比特)]=@p2, [RRC重建请求次数 (无)]=@r4, [RRC连接重建比率 (%)]=@r5, 
+			[通过重建回源小区的eNodeB间同频切换出执行成功次数 (无)]=@tg1, [通过重建回源小区的eNodeB间异频切换出执行成功次数 (无)]=@tg2, [通过重建回源小区的eNodeB内同频切换出执行成功次数 (无)]=@tg3, [通过重建回源小区的eNodeB内异频切换出执行成功次数 (无)]=@tg4, [eNB内切换出成功次数 (次)]=@last1, [eNB内切换出请求次数 (次)]=@last2;
+	else
+		insert into tbKPI select * from inserted;
+```
+
+### tbPRB
+
+```sql
+create trigger tbPRB_trigger on tbPRB for insert
+as
+	declare @begin nvarchar(255), @circuit float, @metaname nvarchar(255), @nbr nvarchar(255), @nbrname nvarchar(255), @prb0 float, @prb1 float, @prb2 float, @prb3 float, @prb4 float, @prb5 float, @prb6 float, @prb7 float, @prb8 float, @prb9 float, @prb10 float, @prb11 float, @prb12 float, @prb13 float, @prb14 float, @prb15 float, @prb16 float, @prb17 float, @prb18 float, @prb19 float, @prb20 float, @prb21 float, @prb22 float, @prb23 float, @prb24 float, @prb25 float, @prb26 float, @prb27 float, @prb28 float, @prb29 float, @prb30 float, @prb31 float, @prb32 float, @prb33 float, @prb34 float, @prb35 float, @prb36 float, @prb37 float, @prb38 float, @prb39 float, @prb40 float, @prb41 float, @prb42 float, @prb43 float, @prb44 float, @prb45 float, @prb46 float, @prb47 float, @prb48 float, @prb49 float, @prb50 float, @prb51 float, @prb52 float, @prb53 float, @prb54 float, @prb55 float, @prb56 float, @prb57 float, @prb58 float, @prb59 float, @prb60 float, @prb61 float, @prb62 float, @prb63 float, @prb64 float, @prb65 float, @prb66 float, @prb67 float, @prb68 float, @prb69 float, @prb70 float, @prb71 float, @prb72 float, @prb73 float, @prb74 float, @prb75 float, @prb76 float, @prb77 float, @prb78 float, @prb79 float, @prb80 float, @prb81 float, @prb82 float, @prb83 float, @prb84 float, @prb85 float, @prb86 float, @prb87 float, @prb88 float, @prb89 float, @prb90 float, @prb91 float, @prb92 float, @prb93 float, @prb94 float, @prb95 float, @prb96 float, @prb97 float, @prb98 float, @prb99 float;	
+	select 
+		@begin = 起始时间,@circuit=周期,@metaname=网元名称,@nbr=小区,@nbrname=小区名,@prb0=[第0个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb1=[第1个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb2=[第2个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb3=[第3个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb4=[第4个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb5=[第5个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb6=[第6个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb7=[第7个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb8=[第8个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb9=[第9个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb10=[第10个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb11=[第11个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb12=[第12个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb13=[第13个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb14=[第14个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb15=[第15个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb16=[第16个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb17=[第17个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb18=[第18个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb19=[第19个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb20=[第20个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb21=[第21个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb22=[第22个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb23=[第23个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb24=[第24个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb25=[第25个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb26=[第26个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb27=[第27个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb28=[第28个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb29=[第29个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb30=[第30个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb31=[第31个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb32=[第32个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb33=[第33个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb34=[第34个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb35=[第35个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb36=[第36个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb37=[第37个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb38=[第38个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb39=[第39个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb40=[第40个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb41=[第41个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb42=[第42个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb43=[第43个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb44=[第44个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb45=[第45个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb46=[第46个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb47=[第47个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb48=[第48个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb49=[第49个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb50=[第50个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb51=[第51个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb52=[第52个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb53=[第53个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb54=[第54个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb55=[第55个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb56=[第56个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb57=[第57个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb58=[第58个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb59=[第59个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb60=[第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb61=[第61个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb62=[第62个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb63=[第63个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb64=[第64个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb65=[第65个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb66=[第66个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb67=[第67个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb68=[第68个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb69=[第69个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb70=[第70个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb71=[第71个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb72=[第72个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb73=[第73个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb74=[第74个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb75=[第75个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb76=[第76个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb77=[第77个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb78=[第78个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb79=[第79个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb80=[第80个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb81=[第81个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb82=[第82个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb83=[第83个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb84=[第84个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb85=[第85个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb86=[第86个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb87=[第87个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb88=[第88个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb89=[第89个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb90=[第90个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb91=[第91个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb92=[第92个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb93=[第93个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb94=[第94个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb95=[第95个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb96=[第96个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb97=[第97个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb98=[第98个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)], @prb99=[第99个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)] from inserted;
+	if (exists(select 小区 from tbPRB where 小区 = @nbr))
+		update tbPRB set 起始时间=@begin, 周期=@circuit, 网元名称=@metaname, 小区=@nbr, 小区名=@nbrname,  [第0个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb0, [第1个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb1, [第2个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb2, [第3个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb3, [第4个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb4, [第5个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb5, [第6个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb6, [第7个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb7, [第8个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb8, [第9个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb9, [第10个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb10, [第11个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb11, [第12个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb12, [第13个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb13, [第14个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb14, [第15个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb15, [第16个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb16, [第17个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb17, [第18个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb18, [第19个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb19, [第20个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb20, [第21个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb21, [第22个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb22, [第23个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb23, [第24个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb24, [第25个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb25, [第26个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb26, [第27个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb27, [第28个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb28, [第29个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb29, [第30个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb30, [第31个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb31, [第32个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb32, [第33个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb33, [第34个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb34, [第35个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb35, [第36个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb36, [第37个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb37, [第38个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb38, [第39个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb39, [第40个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb40, [第41个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb41, [第42个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb42, [第43个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb43, [第44个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb44, [第45个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb45, [第46个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb46, [第47个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb47, [第48个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb48, [第49个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb49, [第50个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb50, [第51个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb51, [第52个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb52, [第53个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb53, [第54个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb54, [第55个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb55, [第56个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb56, [第57个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb57, [第58个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb58, [第59个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb59, [第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb60, [第61个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb61, [第62个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb62, [第63个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb63, [第64个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb64, [第65个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb65, [第66个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb66, [第67个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb67, [第68个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb68, [第69个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb69, [第70个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb70, [第71个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb71, [第72个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb72, [第73个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb73, [第74个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb74, [第75个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb75, [第76个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb76, [第77个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb77, [第78个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb78, [第79个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb79, [第80个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb80, [第81个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb81, [第82个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb82, [第83个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb83, [第84个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb84, [第85个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb85, [第86个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb86, [第87个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb87, [第88个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb88, [第89个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb89, [第90个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb90, [第91个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb91, [第92个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb92, [第93个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb93, [第94个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb94, [第95个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb95, [第96个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb96, [第97个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb97, [第98个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb98, [第99个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]=@prb99;
+	
+	else
+		insert into tbPRB select * from inserted;
+```
+
+### tbMROData
+
+```sql
+create trigger tbMROData_trigger on tbMROData for insert
+as
+	declare @ts nvarchar(30), @ss nvarchar(50), @is nvarchar(50), @lsr float, @lnr float, @lne int, @lnp smallint;
+	select @ts=[TimeStamp], @ss= ServingSector, @is=InterferingSector, @lsr=LteScRSRP, @lnr=LteNcRSRP, @lne=LteNcEarfcn, @lnp=LteNcPci from inserted;
+	if (exists(select [TimeStamp], ServingSector, InterferingSector from tbMROData where [TimeStamp] = @ts and ServingSector=@ss and InterferingSector=@is))
+		update tbMROData set LteScRSRP=@lsr, LteNcRSRP=@lnr, LteNcEarfcn=@lne, LteNcPci=@lnp;
+	else
+		insert into tbMROData select * from inserted;
+```
+
 
 
