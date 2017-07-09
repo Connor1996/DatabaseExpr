@@ -172,11 +172,10 @@ vector<vector<QString>> Dispatcher::NodeInfoQuery(QString nodeId)
 // KPI指标信息查询
 vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
 {
-    return _ReadData(QString("select 起始时间 , 小区1 , [RRC连接重建比率 (%)] from tbKPI where 网元名称 = %1 and 起始时间>%2 and 起始时间<%3 order by 起始时间 asc, 小区1 asc")
+    return _ReadData(QString("select 小区1, 起始时间 , [RRC连接重建比率 (%)] from tbKPI where 网元名称 = %1 and 起始时间>%2 and 起始时间<%3 order by 起始时间 asc, 小区1 asc")
                     .arg(netName)
                     .arg(startDate.toString("dd/MM/yyyy"))
                     .arg(endDate.toString("dd/MM/yyyy")));
-    //return true;
 }
 
 // PRB信息统计与查询

@@ -14,6 +14,7 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     InitConnect();
+    ui->loginButton->setShortcut(Qt::Key_Return);//对应键盘上面大的回车键
     setWindowFlags(Qt::WindowCloseButtonHint); //只要关闭按钮
 
     //setFixedSize(960, 640);
@@ -23,6 +24,7 @@ Widget::Widget(QWidget *parent) :
 
 void Widget::InitConnect()
 {
+
     // 触发登陆
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(Login()));
     connect(ui->cancelButtion, &QPushButton::clicked, [this](){ this->close(); });

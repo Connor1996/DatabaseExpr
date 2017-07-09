@@ -7,7 +7,7 @@
 #include <QStandardItem>
 #include <QTableView>
 #include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
+#include <QtCharts/QbarSeries>
 #include <QtCharts/QtCharts>
 
 
@@ -34,12 +34,22 @@ void Management::InitWidget() {
 void Management::InitConnect() {
 
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
+        if (ui->sectorIdEdit->text() == "") {
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
+            return;
+        }
+
         _ShowTable([this](){
             return _dispatcher.SectorInfoQuery(ui->sectorIdEdit->text());
         });
     });
 
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
+        if (ui->nodeIdEdit->text() == "") {
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
+            return;
+        }
+
         _ShowTable([this](){
             return _dispatcher.NodeInfoQuery(ui->nodeIdEdit->text());
         });
@@ -146,38 +156,51 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     if(ui->scrollArea->widget() != 0)
         delete ui->scrollArea->widget();
 
-    //page2 折线图
-    auto linescene = new QGraphicsScene();
-    auto lineview = new QGraphicsView();
-    lineview->setScene(linescene);
-    lineview->setRenderHint(QPainter::Antialiasing);
-    linescene->setBackgroundBrush(QBrush(QColor(240, 240, 240)));
-    lineview->setSceneRect(10, 10,560, 300);
-    lineview->setSizeIncrement(560,300);
-    lineview->resizeAnchor();
-    lineview->setFrameStyle(QFrame::NoFrame);
+    // 柱状图
+    auto barScene = new QGraphicsScene();
+    auto barView = new QGraphicsView();
+    barView->setScene(barScene);
+    barView->setRenderHint(QPainter::Antialiasing);
+    barScene->setBackgroundBrush(QBrush(QColor(240, 240, 240)));
+    barView->setSceneRect(10, 10,560, 300);
+    barView->setSizeIncrement(560,300);
+    barView->resizeAnchor();
+    barView->setFrameStyle(QFrame::NoFrame);
 
-    QCategoryAxis *axisX = new QCategoryAxis();
-    QCategoryAxis *axisY = new QCategoryAxis();
+
+
+    //QCategoryAxis *axisY = new QCategoryAxis();
     //axisY->setRange(0,6);
-    axisX->setRange(0,7);
+    //axisX->setRange(0,7);
+
+    auto barChart = new QChart();
+    auto axisX = new QBarCategoryAxis();
+    barChart->setAxisX(axisX);
+
+    auto barSeries = new QBarSeries();
+    barChart->addSeries(barSeries);
+
+    bool mark = true;
+    //构建 series，作为图表的数据源
+    for (int i = 1; i < result[0].size(); ) {
+        auto barSet = new QBarSet(result[i][0]);
+        QString pre = result[i][0];
+        while (pre == result[i][0]) {
+            if (mark)
+                axisX->append(result[i][1]);
+            barSet->append(result[i][2].toInt());
+            i++;
+        }
+        mark = false;
+        barSeries->append(barSet)    ;  // 将 series 添加至图表中
+    }
 
 
-    // 构建 series，作为图表的数据源
-    auto lineseries = new QLineSeries();
-    lineseries->append(0, 0);
-    lineseries->append(1, 2);
-    auto lineChart = new QChart();
-    lineChart->addSeries(lineseries);  // 将 series 添加至图表中
-    lineChart->setAxisX(axisX, lineseries);
-    lineChart->setAxisY(axisY, lineseries);
+    barChart->legend()->hide();
+    barChart->createDefaultAxes();
+    barScene->addItem(barChart);
 
-    lineChart->legend()->hide();
-    lineChart->createDefaultAxes();
-    lineChart->setGeometry(10, 10, 560, 300);
-    linescene->addItem(lineChart);
-
-    ui->scrollArea->setWidget(lineview);
+    ui->scrollArea->setWidget(barView);
 }
 
 
