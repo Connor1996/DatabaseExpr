@@ -59,10 +59,9 @@ bool Dispatcher::ExportLast()
 bool Dispatcher::_import(QString sql)
 {
     QSqlQuery query(db);
-    if(query.exec(sql))
-        qDebug() << "OK";
-
-    return true;
+    bool result = query.exec(sql);
+    qDebug() << query.lastError().databaseText();
+    return result;
 }
 
 // tbCell导入
@@ -71,7 +70,7 @@ bool Dispatcher::ImportCell(QString filePath)
     // todo
     QString sql;
 
-    sql = QString("select* into abc from OPENDATASOURCE('Microsoft.Ace.OLEDB.12.0',"
+    sql = QString("select * into tbKPI from OPENDATASOURCE('Microsoft.Ace.OLEDB.12.0',"
 
                   "'Data Source=%1;"
                   "Extended Properties=Excel 8.0')...[sheet1$]")
@@ -110,7 +109,21 @@ bool Dispatcher::ImportMRO(QString filePath)
 bool Dispatcher::ExportTable(QString tableName, QString filePath)
 {
     // todo
-    return true;
+    QString sql;
+
+       sql = QString("EXEC master..xp_cmdshell"
+                     "'bcp TD-LTE.dbo.%1 out %2 -c -q"
+                     " -S %3"
+                     " -U %4"
+                     " -P %5'")
+               .arg(tableName)
+               .arg(filePath)
+               .arg("XB-20170316TUZZ")
+               .arg("sa")
+               .arg("1212");
+    qDebug() << sql;
+    return _import(sql);
+    //return true;
 }
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
@@ -152,29 +165,22 @@ vector<vector<QString>> Dispatcher::SectorInfoQuery(QString sectorId)
 // 基站eNodeB信息查询
 vector<vector<QString>> Dispatcher::NodeInfoQuery(QString nodeId)
 {
-    vector<vector<QString>> result;
-
-    return result;
+    return _ReadData(QString("select * from tbCell where ENODEBID = %1")
+                     .arg(nodeId));
 }
 
 // KPI指标信息查询
-vector<vector<QString>> Dispatcher::KPIQuery()
+vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
 {
-    vector<vector<QString>> result;
-
-    // ODBC
-    // ...
-
-    // while(query.next()) {
-    // read item
-    // json itemInfo = {...}
-    // responseInfo.push_back(itemInfo.dump());
-
-    return result;
+    return _ReadData(QString("select 起始时间 , 小区1 , [RRC连接重建比率 (%)] from tbKPI where 网元名称 = %1 and 起始时间>%2 and 起始时间<%3 order by 起始时间 asc, 小区1 asc")
+                    .arg(netName)
+                    .arg(startDate.toString("dd/MM/yyyy"))
+                    .arg(endDate.toString("dd/MM/yyyy")));
+    //return true;
 }
 
 // PRB信息统计与查询
-vector<vector<QString>> Dispatcher::PRBQuery()
+vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, QDate endDate)
 {
     vector<vector<QString>> result;
 
