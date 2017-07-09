@@ -29,7 +29,6 @@ Management::~Management()
 
 void Management::InitWidget() {
     this->setWindowTitle(QString::fromWCharArray(L"查询界面"));
-
 }
 
 void Management::InitConnect() {
@@ -48,38 +47,56 @@ void Management::InitConnect() {
 
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
         _ShowGraph([this](){
-            return _dispatcher.KPIQuery();
+            return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),
+                                        ui->startDate_KPI->date(), ui->endDate_KPI->date());
         });
     });
 
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
         _ShowGraph([this](){
-            return _dispatcher.PRBQuery();
+            return _dispatcher.PRBQuery(ui->NetName_PRB->currentText(),
+                                        ui->startDate_PRB->date(), ui->endDate_PRB->date());
         });
     });
 
     connect(ui->importCell, &QPushButton::clicked, [this]() {
         if (!_dispatcher.ImportCell(ui->importCellEdit->text()))
-            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
     connect(ui->importKPI, &QPushButton::clicked, [this](){
         if (!_dispatcher.ImportKPI(ui->importKPIEdit->text()))
-            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
     connect(ui->importPRB, &QPushButton::clicked, [this](){
         if (!_dispatcher.ImportPRB(ui->importPRBEdit->text()))
-            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
     connect(ui->importMRO, &QPushButton::clicked, [this](){
         if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
-            QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
+
 
     connect(ui->exportTable, &QPushButton::clicked, [this](){
         if (!_dispatcher.ExportLast())
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+    });
+
+    connect(ui->exportTable, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->exportTable->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
@@ -157,7 +174,6 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 
     lineChart->legend()->hide();
     lineChart->createDefaultAxes();
-    //lineChart->setTitle("Week Line Chart");
     lineChart->setGeometry(10, 10, 560, 300);
     linescene->addItem(lineChart);
 

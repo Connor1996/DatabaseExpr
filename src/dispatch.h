@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <QString>
+#include <QDate>
 #include <functional>
 #include <QtSql/QSqlDatabase>
 
@@ -46,10 +47,10 @@ public:
     vector<vector<QString>> NodeInfoQuery(QString);
 
     // KPI指标信息查询
-    vector<vector<QString>> KPIQuery();
+    vector<vector<QString>> KPIQuery(QString, QDate, QDate);
 
     // PRB信息统计与查询
-    vector<vector<QString>> PRBQuery();
+    vector<vector<QString>> PRBQuery(QString, QDate, QDate);
 private:
         vector<vector<QString>> _ReadData(QString);
         bool _import(QString);
