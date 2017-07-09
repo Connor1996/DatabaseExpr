@@ -37,6 +37,8 @@ public:
     // 导出给定表
     bool ExportTable(QString tableName, QString filePath);
 
+    bool ExportLast();
+
     // 小区配置信息查询
     vector<vector<QString>> SectorInfoQuery(QString);
 
@@ -51,6 +53,8 @@ public:
 private:
         vector<vector<QString>> _ReadData(QString);
         bool _import(QString);
+
+        QString _lastSql;
 };
 
 #endif // DISPATCH_H

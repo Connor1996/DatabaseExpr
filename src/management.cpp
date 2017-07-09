@@ -34,10 +34,6 @@ void Management::InitWidget() {
 
 void Management::InitConnect() {
 
-    connect(ui->sectorQuery_8, &QPushButton::clicked, [this](){
-        return _dispatcher.ImportCell(ui->userIdEdit_14->text());
-    });
-
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
         _ShowTable([this](){
             return _dispatcher.SectorInfoQuery(ui->sectorIdEdit->text());
@@ -81,6 +77,14 @@ void Management::InitConnect() {
         if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
             QMessageBox::warning(0, "error", QString::fromLocal8Bit("导入失败"));
     });
+
+    connect(ui->exportTable, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ExportLast())
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+    });
+
 }
 
 void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
@@ -134,6 +138,7 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     lineview->setSceneRect(10, 10,560, 300);
     lineview->setSizeIncrement(560,300);
     lineview->resizeAnchor();
+    lineview->setFrameStyle(QFrame::NoFrame);
 
     QCategoryAxis *axisX = new QCategoryAxis();
     QCategoryAxis *axisY = new QCategoryAxis();
@@ -152,7 +157,7 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 
     lineChart->legend()->hide();
     lineChart->createDefaultAxes();
-    lineChart->setTitle("Week Line Chart");
+    //lineChart->setTitle("Week Line Chart");
     lineChart->setGeometry(10, 10, 560, 300);
     linescene->addItem(lineChart);
 

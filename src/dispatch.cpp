@@ -14,6 +14,7 @@
 #include <QSqlRecord>
 
 Dispatcher::Dispatcher()
+    : _lastSql("")
 {
     connect_database();
 }
@@ -43,6 +44,16 @@ void Dispatcher::connect_database()
     }
     else
         qDebug() << "OK!";
+}
+
+bool Dispatcher::ExportLast()
+{
+    if (_lastSql == "")
+        return false;
+    // do last sql
+    // and export
+
+    return true;
 }
 
 bool Dispatcher::_import(QString sql)
@@ -104,6 +115,8 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
+    _lastSql = sql;
+
     vector<vector<QString>> result;
 
     QSqlQuery query(db);
@@ -124,6 +137,7 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
         }
         result.push_back(item);
     }
+
     return result;
 }
 

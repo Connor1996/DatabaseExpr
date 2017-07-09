@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1928,7 +1928,7 @@ QScrollBar::sub-line {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="sectorQuery_10">
+        <widget class="QPushButton" name="exportTable">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
