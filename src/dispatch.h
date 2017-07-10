@@ -6,6 +6,7 @@
 #include <QDate>
 #include <functional>
 #include <QtSql/QSqlDatabase>
+#include <QAxObject>
 
 using std::vector;
 using std::function;
@@ -22,6 +23,10 @@ public:
 
     void connect_database();
     //连接数据库
+    void Import_database(QAxObject *, int, int, int);
+
+    void Read_Excel(QString);
+
     vector<vector<QString>> KPIHandler();
     // tbCell导入
     bool ImportCell(QString filePath);

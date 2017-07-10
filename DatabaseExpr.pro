@@ -8,6 +8,7 @@
 QT += core gui
 QT += charts
 QT += sql
+QT += axcontainer
 CONFIG += c++14
 
 
