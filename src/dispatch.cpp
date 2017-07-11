@@ -185,7 +185,7 @@ vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, Q
     return result;
 }
 
-void Dispatcher::Import_database(QAxObject *worksheet, int start, int end, int rows)
+void Dispatcher::_Import_database(QAxObject *worksheet, int start, int end, int rows, QString table)
 {
     int label = 'A';
     QString startlabel,endlabel="";
@@ -198,14 +198,14 @@ void Dispatcher::Import_database(QAxObject *worksheet, int start, int end, int r
     QString Range = startlabel+ QString::number(start) +":"+ endlabel + QString::number(end);
     QAxObject *allEnvData = worksheet->querySubObject("Range(QString)", Range);
     QVariant allEnvDataQVariant = allEnvData->property("Value");
-
     QVariantList allEnvDataList = allEnvDataQVariant.toList();
     QSqlQuery query(db);
     db.transaction();
     QString re = "";
     for(int i=0; i<rows-1; i++)
         re += ", ?";
-    QString sql = QString("insert into test1 values(?%1)")
+    QString sql = QString("insert into %1 values(?%2)")
+                .arg(table)
                 .arg(re);
     //qDebug() << sql;
     query.prepare(sql);
@@ -231,7 +231,7 @@ void Dispatcher::Import_database(QAxObject *worksheet, int start, int end, int r
     db.commit();
 }
 
-void Dispatcher::Read_Excel(QString FileName)
+void Dispatcher::Read_Excel(QString FileName, QString table)
 {
     QAxObject *excel = NULL;
     QAxObject *workbooks = NULL;
@@ -256,12 +256,12 @@ void Dispatcher::Read_Excel(QString FileName)
     for(int i=0; i<intRows/50; i++)
     {
         if(count==1)
-            Import_database(worksheet,count+1,count+49,intCols);
+            _Import_database(worksheet,count+1,count+49,intCols,table);
         else
-            Import_database(worksheet,count,count+49,intCols);
+            _Import_database(worksheet,count,count+49,intCols,table);
         count+=50;
         qDebug() << count;
     }
-    Import_database(worksheet, count, intRows, intCols);
+    _Import_database(worksheet, count, intRows, intCols,table);
     workbooks->dynamicCall("Close()");
 }

@@ -23,9 +23,7 @@ public:
 
     void connect_database();
     //连接数据库
-    void Import_database(QAxObject *, int, int, int);
-
-    void Read_Excel(QString);
+    void Read_Excel(QString, QString);
 
     vector<vector<QString>> KPIHandler();
     // tbCell导入
@@ -59,7 +57,7 @@ public:
 private:
         vector<vector<QString>> _ReadData(QString);
         bool _import(QString);
-
+        void _Import_database(QAxObject *, int, int, int, QString);
         QString _lastSql;
 };
 
