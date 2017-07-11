@@ -19,16 +19,8 @@ public:
 
     ~Dispatcher();
 
-    QSqlDatabase db;
+    static bool ConnectDatabase(QString, QString);
 
-    void connect_database();
-    //连接数据库
-
-    void Read_Database(QString, QString);
-
-    void Read_Excel(QString, QString);
-
-    vector<vector<QString>> KPIHandler();
     // tbCell导入
     bool ImportCell(QString filePath);
 
@@ -58,10 +50,19 @@ public:
     // PRB信息统计与查询
     vector<vector<QString>> PRBQuery(QString, QDate, QDate);
 private:
-        vector<vector<QString>> _ReadData(QString);
-        bool _import(QString);
-        void _Import_database(QAxObject *, int, int, int, QString);
-        QString _lastSql;
+    vector<vector<QString>> _ReadData(QString);
+
+    bool _ReadDatabase(QString, QString);
+
+    bool _ReadExcel(QString, QString);
+
+    bool __ImportDatabase(QAxObject *, int, int, int, QString);
+
+    QString _lastSql;
+
+
+    //连接数据库
+    static QSqlDatabase db;
 };
 
 #endif // DISPATCH_H

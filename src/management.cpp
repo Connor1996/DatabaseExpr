@@ -98,14 +98,14 @@ void Management::InitConnect() {
     });
 
 
-    connect(ui->exportTable, &QPushButton::clicked, [this](){
+    connect(ui->exportResult, &QPushButton::clicked, [this](){
         if (!_dispatcher.ExportLast())
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
-    connect(ui->sectorQuery_9, &QPushButton::clicked, [this](){
+    connect(ui->exportTable, &QPushButton::clicked, [this](){
         if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else

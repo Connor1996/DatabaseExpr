@@ -39,13 +39,13 @@ Widget::~Widget()
 
 void Widget::Login()
 {
-    std::string username = ui->usernameEdit->text().toStdString();
-    std::string password = ui->passwordEdit->text().toStdString();
+    QString username = ui->usernameEdit->text();
+    QString password = ui->passwordEdit->text();
     if (username == "") {
         QMessageBox::information(this, "info", "username not filled");
     } else if (password == "") {
         QMessageBox::information(this, "info", "password not filled");
-    } else if (username == "admin" && password == "admin"){
+    } else if (Dispatcher::ConnectDatabase(username, password)){
         this->close();
         window = new Management();
         window->show();

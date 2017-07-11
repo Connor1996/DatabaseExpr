@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -646,7 +646,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_23">
+                 <widget class="QLabel" name="label_29">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -716,7 +716,7 @@ QComboBox::down-arrow {
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_9">
+                 <widget class="QPushButton" name="exportTable">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1906,7 +1906,7 @@ padding: 5px;
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="exportTable">
+        <widget class="QPushButton" name="exportResult">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
