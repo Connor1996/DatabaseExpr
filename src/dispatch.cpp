@@ -111,7 +111,7 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
     // todo
     QString sql;
 
-       sql = QString("EXEC master..xp_cmdshell"
+       sql = QString("EXEC master.sys.[xp_cmdshell]"
                      "'bcp TD-LTE.dbo.%1 out %2 -c -q"
                      " -S %3"
                      " -U %4"
@@ -121,6 +121,7 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
                .arg("XB-20170316TUZZ")
                .arg("sa")
                .arg("1212");
+    //sql = QString(insert into );
     qDebug() << sql;
     return _import(sql);
     //return true;
@@ -180,9 +181,10 @@ vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, Q
 // PRB信息统计与查询
 vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, QDate endDate)
 {
-    vector<vector<QString>> result;
-
-    return result;
+    return _ReadData(QString::fromLocal8Bit("select 网元名称, 日, 时, [第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)] as [第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)] from tbPRBnew where 网元名称 = %1 and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00'")
+                     .arg(netName)
+                     .arg(startDate.toString("MM/dd/yyyy"))
+                     .arg(endDate.toString("MM/dd/yyyy")));
 }
 
 void Dispatcher::_Import_database(QAxObject *worksheet, int start, int end, int rows, QString table)
@@ -220,7 +222,7 @@ void Dispatcher::_Import_database(QAxObject *worksheet, int start, int end, int 
             if(!allEnvDataList_i[j].isNull())
                 item.push_back(allEnvDataList_i[j]);
             else
-                item.push_back(NULL);
+                item.push_back(QVariant(QVariant::String));
         }
         DataList.push_back(item);
     }
@@ -265,3 +267,47 @@ void Dispatcher::Read_Excel(QString FileName, QString table)
     _Import_database(worksheet, count, intRows, intCols,table);
     workbooks->dynamicCall("Close()");
 }
+
+void Dispatcher::Read_Database(QString table, QString path)
+{
+    QSqlQuery query(db);
+
+    QAxObject *excel = NULL;
+    QAxObject *workbooks = NULL;
+    QAxObject *workbook = NULL;
+    excel = new QAxObject("Excel.Application");
+    if (!excel)
+    {
+        qDebug() << "EXCEL对象丢失!";
+    }
+    excel->dynamicCall("SetVisible(bool)", false);
+    workbooks = excel->querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    workbook = excel->querySubObject("ActiveWorkBook");
+    QAxObject * worksheets = workbook->querySubObject("Sheets");
+    QAxObject * worksheet = workbook->querySubObject("worksheets(int)", 1);
+    //worksheets->querySubObject("Add(QVariant)",worksheet->asVariant());
+    QString ssql = QString("select TOP 1 * from %1").arg(table);
+    query.exec(ssql);
+    QAxObject *cellX;
+    int label = 'A';
+    for(int i=0;i<query.record().count();i++){
+        QString X=QString((char)(label+i))+QString::number(1);//设置要操作的单元格
+        cellX = worksheet->querySubObject("Range(QVariant, QVariant)",X);//获取单元格
+        cellX->dynamicCall("SetValue(const QVariant&)",QVariant(query.record().fieldName(i)));//设置单元格的值
+    }
+
+    workbook->dynamicCall("SaveAs(const QString&)",QDir::toNativeSeparators(path));//保存至filepath，注意一定要用QDir::toNativeSeparators将路径中的"/"转换为"\"，不然一定保存不了。
+    workbook->dynamicCall("Close()");//关闭工作簿
+    excel->dynamicCall("Quit()");//关闭excel
+
+    QString sql = QString("insert into OPENROWSET('Microsoft.Jet.OLEDB.4.0'"
+                          ",'Excel 5.0;HDR=YES;DATABASE=%1',sheet1$)"
+                          "select * from %2")
+            .arg(path)
+            .arg(table);
+    qDebug() << sql;
+    qDebug() << query.exec(sql);
+    delete excel;
+}
+

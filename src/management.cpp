@@ -105,8 +105,8 @@ void Management::InitConnect() {
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
-    connect(ui->exportTable, &QPushButton::clicked, [this](){
-        if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->exportTable->text()))
+    connect(ui->sectorQuery_9, &QPushButton::clicked, [this](){
+        if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));

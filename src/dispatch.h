@@ -23,6 +23,9 @@ public:
 
     void connect_database();
     //连接数据库
+
+    void Read_Database(QString, QString);
+
     void Read_Excel(QString, QString);
 
     vector<vector<QString>> KPIHandler();
