@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -111,15 +111,21 @@ QFrame{background-color: rgb(255, 255, 255);}</string>
                 </item>
                 <item>
                  <widget class="QLineEdit" name="importCellEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -145,6 +151,27 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="chooseFilePath_Cell">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#34495E;}
+QPushButton:hover{color:#F0F0F0;background:#4E6D8C;}QPushButton:pressed{color:#B8C6D1;background:#2D3E50;}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>  选择  </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="importCell">
@@ -206,15 +233,21 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                 </item>
                 <item>
                  <widget class="QLineEdit" name="importKPIEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -240,6 +273,27 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="chooseFilePath_KPI">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#34495E;}
+QPushButton:hover{color:#F0F0F0;background:#4E6D8C;}QPushButton:pressed{color:#B8C6D1;background:#2D3E50;}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>  选择  </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="importKPI">
@@ -300,16 +354,22 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_10">
+                 <widget class="QLineEdit" name="importPRBEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -335,6 +395,27 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="chooseFilePath_PRB">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#34495E;}
+QPushButton:hover{color:#F0F0F0;background:#4E6D8C;}QPushButton:pressed{color:#B8C6D1;background:#2D3E50;}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>  选择  </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="importPRB">
@@ -396,15 +477,21 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                 </item>
                 <item>
                  <widget class="QLineEdit" name="importMROEdit">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -430,6 +517,27 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="chooseFilePath_MRO">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#34495E;}
+QPushButton:hover{color:#F0F0F0;background:#4E6D8C;}QPushButton:pressed{color:#B8C6D1;background:#2D3E50;}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>  选择  </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="importMRO">
@@ -490,16 +598,19 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="importPRBEdit">
+                 <widget class="QLineEdit" name="exportFilePathEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -582,6 +693,27 @@ QComboBox::down-arrow {
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="chooseExportPath">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{border-style:none;padding:7px;border-radius:5px;color:#FFFFFF;background:#34495E;}
+QPushButton:hover{color:#F0F0F0;background:#4E6D8C;}QPushButton:pressed{color:#B8C6D1;background:#2D3E50;}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>  选择  </string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="exportTable">
@@ -676,7 +808,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -713,7 +845,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -878,7 +1010,8 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}
+</string>
                   </property>
                  </widget>
                 </item>
@@ -915,7 +1048,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
+QLineEdit{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
@@ -997,7 +1130,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                 <item>
                  <widget class="QComboBox" name="NetName_KPI">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -1184,7 +1317,7 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                 <item>
                  <widget class="QComboBox" name="NetName_PRB">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
