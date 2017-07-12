@@ -297,21 +297,15 @@ as
 
 ```sql
 根据表tbC2Inew，找出所有的小区三元组<a,b,c>（其中a,b,c互为邻小区），生成新表tbC2I3，其中有三个属性，分别是三个小区的小区ID。
-with sa (ServingSector, InterferingSector) as (
-	select ServingSector, InterferingSector from tbC2INew
-	), --a的小区
- sb (ServingSector, InterferingSector) as (
-	select ServingSector, InterferingSector from tbC2INew
-	), --b的小区
- sc (ServingSector, InterferingSector) as (
-	select ServingSector, InterferingSector from tbC2INew
-	) --c的小区
-insert into tbC2I3 select sa.ServingSector as a, sb.ServingSector as b, sc.ServingSector as c from  sa, sb, sc where sa.ServingSector != sb.ServingSector and sb.ServingSector!=sc.ServingSector and sc.ServingSector != sa.ServingSector --不能两两成环
-	and  sa.InterferingSector=sb.ServingSector and sb.InterferingSector=sc.ServingSector and sc.InterferingSector=sa.ServingSector --三个成环
-	and ((select dbo.Prb6GE70(sa.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sa.ServingSector)) != 0 ) --概率条件(1)
-	and ((select dbo.Prb6GE70(sa.ServingSector, sc.ServingSector)) != 0 or (select dbo.Prb6GE70(sc.ServingSector, sa.ServingSector)) != 0 ) --概率条件(2)
-	and ((select dbo.Prb6GE70(sc.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sc.ServingSector)) != 0 ) --概率条件(3)
-select * from tbC2I3
+with SI(ServingSector, InterferingSector) as
+(
+	(select ServingSector, InterferingSector from tbC2INew where Prb6 >= 0.7)
+	union
+	(select InterferingSector, ServingSector  from tbC2INew where Prb6 >= 0.7)
+)
+insert into tbC2I3 select A.ServingSector as a, B.ServingSector as b, C.ServingSector as c from SI as A, SI as B, SI as C
+	where (A.InterferingSector = B.ServingSector and B.InterferingSector = C.ServingSector and C.InterferingSector = A.ServingSector
+		and A.ServingSector < A.InterferingSector and B.ServingSector < B.InterferingSector)
 ```
 
 ## 触发器
