@@ -155,7 +155,7 @@ void Management::InitConnect() {
 
     connect(ui->exportResult, &QPushButton::clicked, [this](){
 
-        if (!_dispatcher.ExportLast())
+        if (!_dispatcher.ExportLast(""))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));

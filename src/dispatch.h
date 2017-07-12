@@ -33,9 +33,9 @@ public:
     bool ImportMRO(QString filePath);
 
     // 导出给定表
-    bool ExportTable(QString tableName, QString filePath);
+    bool ExportTable(QString, QString);
 
-    bool ExportLast();
+    bool ExportLast(QString);
 
     // 小区配置信息查询
     vector<vector<QString>> SectorIdQuery(QString);
@@ -53,9 +53,11 @@ public:
 private:
     vector<vector<QString>> _ReadData(QString);
 
-    bool _ReadDatabase(QString, QString);
+    bool _ReadDatabase(QString, QString, QString);
 
     bool _ReadExcel(QString, QString);
+
+    //QString _WriteSQL(QString);
 
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
