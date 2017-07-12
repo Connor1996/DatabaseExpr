@@ -54,7 +54,7 @@ bool Dispatcher::ExportLast(QString filePath)
 // tbCell导入
 bool Dispatcher::ImportCell(QString filePath)
 {
-    return _ReadExcel("tbCell", filePath);
+    return _ReadExcel("test1", filePath);
 }
 
 
@@ -185,30 +185,59 @@ bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int 
     QString sql = QString("insert into %1 values(?%2)")
         .arg(table)
         .arg(re);
-    //qDebug() << sql;
     query.prepare(sql);
+    for(int i=0; i<=allEnvDataList.count()-1; i++){
+        QVariantList Item = allEnvDataList[i].toList();
+        //qDebug() << __CheckData(table, Item, rows);
+        if(!__CheckData(table, Item, rows)){
+            allEnvDataList.removeAt(i);
+            i--;
+        }
+    }
+    qDebug() << allEnvDataList.count();
     QVariantList DataList;
-
+    QVariantList item;
     for (int j = 0; j<rows; j++)
     {
-        QVariantList item;
-        for (int i = 0; i <= end - start; i++)
+        item.clear();
+        for (int i = 0; i <= allEnvDataList.count()-1; i++)
         {
             QVariantList allEnvDataList_i = allEnvDataList[i].toList();
-            if (!allEnvDataList_i[j].isNull())
+            if(!allEnvDataList_i[j].isNull())
                 item.push_back(allEnvDataList_i[j]);
             else
                 item.push_back(QVariant(QVariant::String));
         }
         DataList.push_back(item);
     }
-    qDebug() << DataList.count();
-    for (int j = 0; j < rows; j++)
+
+    for (int j = 0; j < rows; j++){;
         query.addBindValue(DataList[j].toList());
+    }
     query.execBatch();
     db.commit();
 
     return true;
+}
+
+bool Dispatcher::__CheckData(QString tableName, QVariantList Item, int col)
+{
+    if(tableName == "tbCell"||tableName == "test1"){
+        for(int j=0; j<col; j++){
+            //qDebug()<<Item[j].typeName()<<j;
+            if(Item[j].typeName()!=QString("double")&&j>=15){
+                return false;
+            }
+            else if((((j>=1)&&(j<=6))||(j>=10))&&Item[j].isNull())
+                return false;
+        }
+        return true;
+    }
+    else if(tableName == "tbMROData"){
+        return true;
+    }
+    else
+        return true;
 }
 
 bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
@@ -233,6 +262,7 @@ bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
     qDebug() << intRows;
     qDebug() << intCols;
     int count = 1;
+
     for (int i = 0; i < intRows / 50; i++)
     {
         if (count == 1)
