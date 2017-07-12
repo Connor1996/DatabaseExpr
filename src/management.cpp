@@ -36,23 +36,23 @@ void Management::InitConnect() {
 
     // 选择文件
     connect(ui->chooseFilePath_Cell, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx, *.xls)"));
+        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", "Excel Files(*.xlsx *.xls *.csv)");
         ui->importCellEdit->setText(path);
     });
     connect(ui->chooseFilePath_KPI, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx, *.xls)"));
+        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
         ui->importKPIEdit->setText(path);
     });
     connect(ui->chooseFilePath_PRB, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx, *.xls)"));
+        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
         ui->importPRBEdit->setText(path);
     });
     connect(ui->chooseFilePath_MRO, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx, *.xls)"));
+        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
         ui->importMROEdit->setText(path);
     });
     connect(ui->chooseExportPath, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx, *.xls)"));
+        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
         ui->exportFilePathEdit->setText(path);
     });
 
