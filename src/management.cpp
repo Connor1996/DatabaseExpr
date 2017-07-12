@@ -173,7 +173,17 @@ void Management::InitConnect() {
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
 
+    connect(ui->sectorQuery_3, &QPushButton::clicked, [this](){
+        _ShowTable([this](){
+            return _dispatcher.C2Ianalyse();
+        });
+    });
 
+    connect(ui->sectorQuery_2, &QPushButton::clicked, [this](){
+        _ShowTable([this](){
+            return _dispatcher.TripleAnalyse();
+        });
+    });
 }
 
 void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)

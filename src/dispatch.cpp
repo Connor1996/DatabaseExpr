@@ -124,6 +124,12 @@ vector<vector<QString>> Dispatcher::SectorNameQuery(QString sectorName)
         .arg(sectorName));
 }
 
+vector<QString> Dispatcher::SectorId()
+{
+    return _ReadData(QString("select SECTOR_ID from tbCell"));
+}
+
+
 // 基站eNodeB信息查询
 vector<vector<QString>> Dispatcher::NodeIdQuery(QString nodeId)
 {
@@ -309,5 +315,99 @@ bool Dispatcher::_prepareforPRB()
     qDebug() << query.exec(sql);
     sql.clear();
     sql = "exec dbo.PRB_Hour_pro";
+    return query.exec(sql);
+
+}
+
+vector<vector<QString>> Dispatcher::C2Ianalyse()
+{
+    _prepareforC2I();
+    return _ReadData("exec dbo.RSRP_Prb_pro");
+}
+
+bool Dispatcher::_prepareforC2I()
+{
+    QString sql = QString("create table tbC2INew ("
+                          " ServingSector nvarchar(50),"
+                          " InterferingSector nvarchar(50),"
+                          " mean float,"
+                          " std float,"
+                          " Prb9 float,"
+                          " Prb6 float"
+                          ")");
+    query.exec(sql);
+    sql.clear();
+    sql = QString("create procedure Calc_mean_std_pro"
+                  " as"
+                  "  begin"
+                  "   select ServingSector, InterferingSector, avg(LteScRSRP - LteNcRSRP) as mean, stdev(LteScRSRP - LteNcRSRP) as std into tbMROMean_Std from tbMROData group by ServingSector, InterferingSector"
+                  "  end");
+    qDebug() << query.exec(sql);
+    sql.clear();
+    sql = QString("exec dbo.Calc_mean_std_pro");
+    qDebug() << query.exec(sql);
+    sql = QString("create procedure RSRP_Prb_pro"
+                  " as"
+                      " begin"
+                          " truncate table tbC2INew"
+                          " insert into tbC2INew select ServingSector, InterferingSector, mean, std, 0, 0 from tbMROMean_Std"
+                          " update tbC2INew set Prb9 = ("
+                                  " case"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 5 and (9 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " end"
+                              " ), Prb6 = ("
+                                  " case"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 5 and (6 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " end"
+                              " )"
+                          " select * from tbC2INew where Prb9 is not null and Prb6 is not null"
+                      " end");
+    return query.exec(sql);
+}
+
+vector<vector<QString>> Dispatcher::TripleAnalyse()
+{
+    qDebug()<<_prepareforTriple();
+    return _ReadData("select * from tbC2I3");
+}
+
+bool Dispatcher::_prepareforTriple()
+{
+    QString sql = QString("create table tbC2I3 ("
+                          " a varchar(50),"
+                          " b varchar(50),"
+                          " c varchar (50),"
+                          " PRIMARY KEY (a,b,c)"
+                      ")");
+    qDebug()<<query.exec(sql);
+    sql.clear();
+    sql = QString("create function Prb6GE70(@x varchar(50), @y varchar(50))"
+                  " returns float"
+                  " as"
+                      " begin"
+                      " declare @rslt float"
+                      " set @rslt = 0"
+                      " select @rslt = Prb6 from tbC2INew where ServingSector = @x and InterferingSector = @y and Prb6 >= 0.7"
+                      " return @rslt"
+                      " end");
+    qDebug()<<query.exec(sql);
+    sql.clear();
+    sql = QString("with sa (ServingSector, InterferingSector) as ("
+                  " select ServingSector, InterferingSector from tbC2INew"
+                  " ),"
+               " sb (ServingSector, InterferingSector) as ("
+                  " select ServingSector, InterferingSector from tbC2INew"
+                  " ),"
+               " sc (ServingSector, InterferingSector) as ("
+                  " select ServingSector, InterferingSector from tbC2INew"
+                  " )"
+              " insert into tbC2I3 select sa.ServingSector as a, sb.ServingSector as b, sc.ServingSector as c from  sa, sb, sc where sa.ServingSector != sb.ServingSector and sb.ServingSector!=sc.ServingSector and sc.ServingSector != sa.ServingSector"
+                  " and ((select dbo.Prb6GE70(sa.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sa.ServingSector)) != 0 )"
+                  " and ((select dbo.Prb6GE70(sa.ServingSector, sc.ServingSector)) != 0 or (select dbo.Prb6GE70(sc.ServingSector, sa.ServingSector)) != 0 )"
+                  " and ((select dbo.Prb6GE70(sc.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sc.ServingSector)) != 0 )");
     return query.exec(sql);
 }
