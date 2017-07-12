@@ -30,8 +30,8 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
         "DATABASE=%2;"
         "UID=%3;"
         "PWD=%4;")
-        .arg("Connor")
-        .arg("LTE-DB")
+        .arg("XB-20170316TUZZ")
+        .arg("TD-LTE")
         .arg(name)
         .arg(password);
 
@@ -39,14 +39,14 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
     return db.open();
 }
 
-bool Dispatcher::ExportLast()
+bool Dispatcher::ExportLast(QString filePath)
 {
 
-
+    qDebug() << query.lastQuery();
     // do last sql
     // and export
-
-    return true;
+    QString path = "C:\\Users\\Administrator\\Desktop\\test10";
+    return _ReadDatabase(query.lastQuery(),query.lastQuery(),path);
 }
 
 
@@ -81,7 +81,9 @@ bool Dispatcher::ImportMRO(QString filePath)
 // 导出给定表
 bool Dispatcher::ExportTable(QString tableName, QString filePath)
 {
-    return _ReadExcel(tableName, filePath);
+    QString sql = QString("select * from %1").arg(tableName);
+    QString ssql = QString("select TOP 1 * from %1").arg(tableName);
+    return _ReadDatabase(sql, ssql, filePath);
 }
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
@@ -152,7 +154,6 @@ vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, Q
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
 }
-
 
 bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int rows, QString table)
 {
@@ -238,7 +239,7 @@ bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
     return result;
 }
 
-bool Dispatcher::_ReadDatabase(QString tableName, QString pathName)
+bool Dispatcher::_ReadDatabase(QString SQL, QString ssql, QString pathName)
 {
     QAxObject *excel = NULL;
     QAxObject *workbooks = NULL;
@@ -256,7 +257,7 @@ bool Dispatcher::_ReadDatabase(QString tableName, QString pathName)
     QAxObject * worksheets = workbook->querySubObject("Sheets");
     QAxObject * worksheet = workbook->querySubObject("worksheets(int)", 1);
     //worksheets->querySubObject("Add(QVariant)",worksheet->asVariant());
-    QString ssql = QString("select TOP 1 * from %1").arg(tableName);
+    //QString ssql = QString("select TOP 1 * from %1").arg(tableName);
     query.exec(ssql);
     QAxObject *cellX;
     int label = 'A';
@@ -272,9 +273,9 @@ bool Dispatcher::_ReadDatabase(QString tableName, QString pathName)
 
     QString sql = QString("insert into OPENROWSET('Microsoft.Jet.OLEDB.4.0'"
         ",'Excel 5.0;HDR=YES;DATABASE=%1',sheet1$)"
-        "select * from %2")
+        "%2")
         .arg(pathName)
-        .arg(tableName);
+        .arg(SQL);
 
     qDebug() << sql;
     bool result = query.exec(sql);
