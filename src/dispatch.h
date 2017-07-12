@@ -41,6 +41,8 @@ public:
     vector<vector<QString>> SectorIdQuery(QString);
     vector<vector<QString>> SectorNameQuery(QString);
 
+    vector<QString> SectorId();
+
     // 基站eNodeB信息查询
     vector<vector<QString>> NodeIdQuery(QString);
     vector<vector<QString>> NodeNameQuery(QString);
@@ -50,6 +52,10 @@ public:
 
     // PRB信息统计与查询
     vector<vector<QString>> PRBQuery(QString, QDate, QDate);
+
+    vector<vector<QString>> C2Ianalyse();
+
+    vector<vector<QString>> TripleAnalyse();
 private:
     vector<vector<QString>> _ReadData(QString);
 
@@ -62,6 +68,10 @@ private:
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
     bool _prepareforPRB();
+
+    bool _prepareforC2I();
+
+    bool _prepareforTriple();
 
     QSqlQuery query;
 
