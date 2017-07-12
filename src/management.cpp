@@ -19,6 +19,7 @@ Management::Management(QWidget *parent) :
     InitWidget();
     InitConnect();
 
+
 }
 
 Management::~Management()
@@ -34,25 +35,36 @@ void Management::InitWidget() {
 void Management::InitConnect() {
 
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
-        if (ui->sectorIdEdit->text() == "") {
+        if (ui->sectorIdEdit->text() != "") {
+            _ShowTable([this](){
+                return _dispatcher.SectorIdQuery(ui->sectorIdEdit->text());
+            });
+        } else if (ui->sectorNameEdit->text() != "") {
+            _ShowTable([this](){
+                return _dispatcher.SectorNameQuery(ui->sectorNameEdit->text());
+            });
+        } else {
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
-            return;
         }
+    });
 
-        _ShowTable([this](){
-            return _dispatcher.SectorInfoQuery(ui->sectorIdEdit->text());
-        });
+
+    connect(ui->sectorNameChoose, &QComboBox::currentTextChanged, [this](){
+        ui->sectorNameEdit->setText(ui->sectorNameChoose->currentText());
     });
 
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
-        if (ui->nodeIdEdit->text() == "") {
+        if (ui->nodeIdEdit->text() != "") {
+            _ShowTable([this](){
+                return _dispatcher.NodeIdQuery(ui->nodeIdEdit->text());
+            });
+        } else if (ui->nodeNameEdit->text() != "") {
+            _ShowTable([this](){
+                return _dispatcher.NodeNameQuery(ui->nodeNameEdit->text());
+            });
+        } else {
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
-            return;
         }
-
-        _ShowTable([this](){
-            return _dispatcher.NodeInfoQuery(ui->nodeIdEdit->text());
-        });
     });
 
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
@@ -70,6 +82,10 @@ void Management::InitConnect() {
     });
 
     connect(ui->importCell, &QPushButton::clicked, [this]() {
+        if (ui->importCellEdit->text() == ""){
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
+            return;
+        }
         if (!_dispatcher.ImportCell(ui->importCellEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
@@ -77,6 +93,11 @@ void Management::InitConnect() {
     });
 
     connect(ui->importKPI, &QPushButton::clicked, [this](){
+        if (ui->importKPIEdit->text() == ""){
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
+            return;
+        }
+
         if (!_dispatcher.ImportKPI(ui->importKPIEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
@@ -84,6 +105,11 @@ void Management::InitConnect() {
     });
 
     connect(ui->importPRB, &QPushButton::clicked, [this](){
+        if (ui->importPRBEdit->text() == ""){
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
+            return;
+        }
+
         if (!_dispatcher.ImportPRB(ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
@@ -91,6 +117,11 @@ void Management::InitConnect() {
     });
 
     connect(ui->importMRO, &QPushButton::clicked, [this](){
+        if (ui->importMROEdit->text() == ""){
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
+            return;
+        }
+
         if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
@@ -99,6 +130,7 @@ void Management::InitConnect() {
 
 
     connect(ui->exportResult, &QPushButton::clicked, [this](){
+
         if (!_dispatcher.ExportLast())
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
@@ -106,11 +138,17 @@ void Management::InitConnect() {
     });
 
     connect(ui->exportTable, &QPushButton::clicked, [this](){
+        if (ui->importPRBEdit->text() == ""){
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
+            return;
+        }
+
         if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
+
 
 }
 

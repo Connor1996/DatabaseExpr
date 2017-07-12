@@ -17,15 +17,11 @@
 QSqlDatabase Dispatcher::db = QSqlDatabase::addDatabase("QODBC");
 
 Dispatcher::Dispatcher()
-    : _lastSql("")
+    : query(db)
 {
 
 }
 
-Dispatcher::~Dispatcher()
-{
-
-}
 
 bool Dispatcher::ConnectDatabase(QString name, QString password)
 {
@@ -34,8 +30,8 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
         "DATABASE=%2;"
         "UID=%3;"
         "PWD=%4;")
-        .arg("XB-20170316TUZZ")
-        .arg("TD-LTE")
+        .arg("Connor")
+        .arg("LTE-DB")
         .arg(name)
         .arg(password);
 
@@ -45,8 +41,8 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
 
 bool Dispatcher::ExportLast()
 {
-    if (_lastSql == "")
-        return false;
+
+
     // do last sql
     // and export
 
@@ -90,11 +86,8 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
-    _lastSql = sql;
-
     vector<vector<QString>> result;
 
-    QSqlQuery query(db);
     if (!query.exec(sql))
         qDebug() << "[ERROR]" << query.lastError().databaseText();
     int size = query.record().count();
@@ -116,21 +109,33 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 }
 
 // 小区配置信息查询
-vector<vector<QString>> Dispatcher::SectorInfoQuery(QString sectorId)
+vector<vector<QString>> Dispatcher::SectorIdQuery(QString sectorId)
 {
 
     return _ReadData(QString("select * from tbCell where SECTOR_ID = '%1'")
         .arg(sectorId));
 }
 
+vector<vector<QString>> Dispatcher::SectorNameQuery(QString sectorName)
+{
+    return _ReadData(QString("select * from tbCell where SECTOR_NAME = '%1'")
+        .arg(sectorName));
+}
+
 // 基站eNodeB信息查询
-vector<vector<QString>> Dispatcher::NodeInfoQuery(QString nodeId)
+vector<vector<QString>> Dispatcher::NodeIdQuery(QString nodeId)
 {
     return _ReadData(QString("select * from tbCell where ENODEBID = %1")
         .arg(nodeId));
 }
-// KPI指标信息查询
 
+vector<vector<QString>> Dispatcher::NodeNameQuery(QString nodeName)
+{
+    return _ReadData(QString("select * from tbCell where ENODEB_NAME = %1")
+        .arg(nodeName));
+}
+
+// KPI指标信息查询
 vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
 {
     return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [RRC连接重建比率 (%)] from tbKPI where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 起始时间 asc, 小区1 asc")
@@ -154,8 +159,8 @@ bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int 
     int label = 'A';
     QString startlabel, endlabel = "";
     startlabel = QString((char)label);
-    //endlabel = QString((char)(label+rows-1))
-    if (rows>26)
+
+    if (rows > 26)
         endlabel = QString((char)(label + rows / 26 - 1)) + QString((char)(label + rows % 26 - 1));
     else
         endlabel = QString((char)(label + rows - 1));
@@ -163,10 +168,10 @@ bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int 
     QAxObject *allEnvData = worksheet->querySubObject("Range(QString)", Range);
     QVariant allEnvDataQVariant = allEnvData->property("Value");
     QVariantList allEnvDataList = allEnvDataQVariant.toList();
-    QSqlQuery query(db);
+
     db.transaction();
     QString re = "";
-    for (int i = 0; i<rows - 1; i++)
+    for (int i = 0; i< rows - 1; i++)
         re += ", ?";
     QString sql = QString("insert into %1 values(?%2)")
         .arg(table)
@@ -189,7 +194,7 @@ bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int 
         DataList.push_back(item);
     }
     qDebug() << DataList.count();
-    for (int j = 0; j<rows; j++)
+    for (int j = 0; j < rows; j++)
         query.addBindValue(DataList[j].toList());
     query.execBatch();
     db.commit();
@@ -219,7 +224,7 @@ bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
     qDebug() << intRows;
     qDebug() << intCols;
     int count = 1;
-    for (int i = 0; i<intRows / 50; i++)
+    for (int i = 0; i < intRows / 50; i++)
     {
         if (count == 1)
             __ImportDatabase(worksheet, count + 1, count + 49, intCols, tableName);
@@ -235,11 +240,10 @@ bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
 
 bool Dispatcher::_ReadDatabase(QString tableName, QString pathName)
 {
-    QSqlQuery query(db);
-
     QAxObject *excel = NULL;
     QAxObject *workbooks = NULL;
     QAxObject *workbook = NULL;
+
     excel = new QAxObject("Excel.Application");
     if (!excel)
     {
@@ -271,10 +275,11 @@ bool Dispatcher::_ReadDatabase(QString tableName, QString pathName)
         "select * from %2")
         .arg(pathName)
         .arg(tableName);
+
     qDebug() << sql;
-    qDebug() << query.exec(sql);
+    bool result = query.exec(sql);
     delete excel;
 
-    return true;
+    return result;
 }
 

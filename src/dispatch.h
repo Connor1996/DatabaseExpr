@@ -7,6 +7,7 @@
 #include <functional>
 #include <QtSql/QSqlDatabase>
 #include <QAxObject>
+#include <QSqlQuery>
 
 using std::vector;
 using std::function;
@@ -16,8 +17,6 @@ class Dispatcher
 public:
 
     Dispatcher();
-
-    ~Dispatcher();
 
     static bool ConnectDatabase(QString, QString);
 
@@ -39,10 +38,12 @@ public:
     bool ExportLast();
 
     // 小区配置信息查询
-    vector<vector<QString>> SectorInfoQuery(QString);
+    vector<vector<QString>> SectorIdQuery(QString);
+    vector<vector<QString>> SectorNameQuery(QString);
 
     // 基站eNodeB信息查询
-    vector<vector<QString>> NodeInfoQuery(QString);
+    vector<vector<QString>> NodeIdQuery(QString);
+    vector<vector<QString>> NodeNameQuery(QString);
 
     // KPI指标信息查询
     vector<vector<QString>> KPIQuery(QString, QDate, QDate);
@@ -58,7 +59,7 @@ private:
 
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
-    QString _lastSql;
+    QSqlQuery query;
 
 
     //连接数据库

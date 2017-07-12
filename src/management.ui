@@ -69,7 +69,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -133,39 +133,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
-                <item>
-                 <widget class="QLabel" name="label_21">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>新建表名</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_15">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                  <property name="text">
-                   <string>tbCell</string>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <spacer name="horizontalSpacer_14">
                   <property name="orientation">
@@ -262,39 +229,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_19">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>新建表名</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_13">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                  <property name="text">
-                   <string>tbKPI</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <spacer name="horizontalSpacer_13">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -390,39 +324,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_17">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>新建表名</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_11">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                  <property name="text">
-                   <string>tbPRB</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <spacer name="horizontalSpacer_12">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -517,39 +418,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
-                <item>
-                 <widget class="QLabel" name="label_12">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>新建表名</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_9">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                  <property name="text">
-                   <string>tbMROData</string>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <spacer name="horizontalSpacer_11">
                   <property name="orientation">
@@ -836,7 +704,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit">
+                 <widget class="QLineEdit" name="sectorNameEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -849,23 +717,25 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                   </property>
                  </widget>
                 </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <property name="spacing">
-                 <number>7</number>
-                </property>
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinAndMaxSize</enum>
-                </property>
                 <item>
-                 <widget class="QComboBox" name="roomId_2">
+                 <widget class="QComboBox" name="sectorNameChoose">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QComboBox{border-style:none;padding:5px;border-radius:5px; color:#FFFFFF;background:#3498DB;
@@ -891,10 +761,45 @@ QComboBox::down-arrow {
 }</string>
                   </property>
                   <property name="currentIndex">
-                   <number>-1</number>
+                   <number>0</number>
                   </property>
+                  <item>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>虢都宾馆小基站-HLHE-1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>灵宝隆盛福星苑小基站-HLHE-1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>灵宝桃林地下商业街小基站-HLWE-1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>卢氏农商行大楼小基站-HLHE-1</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <property name="spacing">
+                 <number>7</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetMinAndMaxSize</enum>
+                </property>
                 <item>
                  <spacer name="horizontalSpacer">
                   <property name="orientation">
@@ -1001,7 +906,7 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="userIdEdit_4">
+                 <widget class="QLineEdit" name="nodeNameEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
