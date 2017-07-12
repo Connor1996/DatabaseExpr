@@ -28,6 +28,11 @@ Management::~Management()
 
 void Management::InitWidget() {
     this->setWindowTitle(QString::fromWCharArray(L"查询界面"));
+
+    auto vec = _dispatcher.SectorId();
+
+    for (int i = 1; i < vec.size(); i++)
+        ui->sectorNameChoose->addItem(vec[i][0]);
 }
 
 void Management::InitConnect() {
@@ -96,13 +101,13 @@ void Management::InitConnect() {
         }
     });
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
-        _ShowGraph([this](){
+        _ShowBarGraph([this](){
             return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),
                                         ui->startDate_KPI->date(), ui->endDate_KPI->date());
         });
     });
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
-        _ShowGraph([this](){
+        _ShowLineGraph([this](){
             return _dispatcher.PRBQuery(ui->NetName_PRB->currentText(),
                                         ui->startDate_PRB->date(), ui->endDate_PRB->date());
         });
@@ -167,16 +172,15 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
-
     ////////////////////////////////////////////
 
-    connect(ui->sectorQuery_3, &QPushButton::clicked, [this](){
+    connect(ui->C2IAnalyse, &QPushButton::clicked, [this](){
         _ShowTable([this](){
-            return _dispatcher.C2Ianalyse();
+            return _dispatcher.C2IAnalyse();
         });
     });
 
-    connect(ui->sectorQuery_2, &QPushButton::clicked, [this](){
+    connect(ui->TripleAnalyse, &QPushButton::clicked, [this](){
         _ShowTable([this](){
             return _dispatcher.TripleAnalyse();
         });
@@ -217,7 +221,7 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 }
 
 
-void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
+void Management::_ShowBarGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
 
@@ -233,11 +237,6 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
 
     barView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     barView->setRenderHint(QPainter::Antialiasing);
-    barScene->setBackgroundBrush(QBrush(QColor(240, 240, 240)));
-    barView->setSceneRect(10, 10,600, 600);
-    barView->setSizeIncrement(600,600);
-    //barView->resizeAnchor();
-    barView->resize(600,600);
     barView->setFrameStyle(QFrame::NoFrame);
 
     auto barSeries = new QBarSeries();
@@ -261,9 +260,9 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     }
 
     auto barChart = new QChart();
-    barChart->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    barChart->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     barChart->setAnimationOptions(QChart::SeriesAnimations);
-    barChart->setGeometry(0, 0, 600, 600);
+    barChart->resize(700, 700);
     barChart->addSeries(barSeries);
 
     barChart->createDefaultAxes();
@@ -275,6 +274,54 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     ui->scrollArea->setWidget(barView);
 }
 
+void Management::_ShowLineGraph(function<vector<vector<QString>>(void)> fn)
+{
+    const auto& result = fn();
 
+    ui->count->setText(QString::number(result.size() - 1));
+    // 判断是否已经有widget，有则删除
+    if(ui->scrollArea->widget() != 0)
+        delete ui->scrollArea->widget();
 
+    // 柱状图
+    auto lineScene = new QGraphicsScene();
+    auto lineView = new QGraphicsView();
+    lineView->setScene(lineScene);
 
+    lineView->setRenderHint(QPainter::Antialiasing);
+    lineView->setFrameStyle(QFrame::NoFrame);
+
+    auto lineSeries = new QLineSeries();
+
+    auto axisX = new QDateTimeAxis();
+    axisX->setFormat("MM-dd-yyyy");
+    bool mark = true;
+    //构建 series，作为图表的数据源
+    for (int i = 1; i < result.size(); ) {
+        QString pre = result[i][0];
+        while (i < result.size() && pre == result[i][0] ) {
+            lineSeries->append(QDateTime::fromString(result[i][1], "MM/dd/yyyy hh:mm:ss").toMSecsSinceEpoch(), result[i][2].toFloat());
+            qDebug() << result[i][0] << result[i][1] << result[i][2];
+            i++;
+        }
+        mark = false;
+    }
+
+    auto lineChart = new QChart();
+    lineChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    lineChart->setAnimationOptions(QChart::SeriesAnimations);
+    lineChart->resize(700, 700);
+    lineChart->addSeries(lineSeries);
+
+    lineChart->createDefaultAxes();
+    lineChart->setAxisX(axisX, lineSeries);
+
+    auto axisY = new QValueAxis();
+    axisY->setRange(-114, -118);
+    lineChart->setAxisY(axisY, lineSeries);
+
+    lineChart->legend()->setAlignment(Qt::AlignBottom);
+    lineScene->addItem(lineChart);
+
+    ui->scrollArea->setWidget(lineView);
+}

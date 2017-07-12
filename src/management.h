@@ -27,8 +27,8 @@ private:
     void InitConnect();
 
     void _ShowTable(function<vector<vector<QString>>(void)>);
-    void _ShowGraph(function<vector<vector<QString>>(void)>);
-
+    void _ShowBarGraph(function<vector<vector<QString>>(void)>);
+    void _ShowLineGraph(function<vector<vector<QString>>(void)>);
     Ui::Management *ui;
 
     Dispatcher _dispatcher;

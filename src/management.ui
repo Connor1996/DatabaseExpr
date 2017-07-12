@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1274</width>
+    <width>1328</width>
     <height>812</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -900,26 +906,6 @@ QComboBox::down-arrow {
                     <string/>
                    </property>
                   </item>
-                  <item>
-                   <property name="text">
-                    <string>虢都宾馆小基站-HLHE-1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>灵宝隆盛福星苑小基站-HLHE-1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>灵宝桃林地下商业街小基站-HLWE-1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>卢氏农商行大楼小基站-HLHE-1</string>
-                   </property>
-                  </item>
                  </widget>
                 </item>
                </layout>
@@ -1172,6 +1158,21 @@ QComboBox::down-arrow {
                     <string>三门峡连霍义马高速东-HLHF</string>
                    </property>
                   </item>
+                  <item>
+                   <property name="text">
+                    <string>三门峡义马电视台-HLHF</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>三门峡义马电业局-HLHF</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>三门峡义马郭庄-HLHF</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                </layout>
@@ -1359,6 +1360,16 @@ QComboBox::down-arrow {
                     <string>三门峡连霍义马高速东-HLHF</string>
                    </property>
                   </item>
+                  <item>
+                   <property name="text">
+                    <string>三门峡义马电视台-HLHF</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>三门峡义马大鸿泰美化塔-HLHF</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                </layout>
@@ -1494,80 +1505,6 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_14">
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinAndMaxSize</enum>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string> 小区ID </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_7">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_15">
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinAndMaxSize</enum>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_24">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>小区名称</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_17">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_16">
                 <property name="spacing">
                  <number>7</number>
@@ -1575,42 +1512,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
-                <item>
-                 <widget class="QComboBox" name="roomId_7">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QComboBox{border-style:none;padding:5px;border-radius:5px; color:#FFFFFF;background:#3498DB;
-selection-background-color: #3498DB;
-}
-
-QComboBox:hover, QPushButton:hover
-{
-    color:#E5FEFF;background:#5DACE4
-}
-
-QComboBox::drop-down {
-color:#E5FEFF;background:#2980B9;
-    border-left-width: 0px;
-     border-left-style: solid; /* just a single line */
-     border-top-right-radius: 3px; /* same radius as the QComboBox */
-     border-bottom-right-radius: 3px;
-     padding-left: 10px;
-}
-
-QComboBox::down-arrow {
-    image: url(:/misc/down_arrow_2);
-}</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>-1</number>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <spacer name="horizontalSpacer_4">
                   <property name="orientation">
@@ -1625,7 +1526,7 @@ QComboBox::down-arrow {
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_3">
+                 <widget class="QPushButton" name="C2IAnalyse">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1662,80 +1563,6 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_13">
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinAndMaxSize</enum>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_6">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string> 小区ID </string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_5">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
-                <property name="sizeConstraint">
-                 <enum>QLayout::SetMinAndMaxSize</enum>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_7">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="text">
-                   <string>小区名称</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="userIdEdit_6">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLineEdit{border-style:none;padding:5px;border-radius:5px;border:2px solid #DCE4EC;}
-QLineEdit:focus{border:2px solid #3498DB;}</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_6">
                 <property name="spacing">
                  <number>7</number>
@@ -1743,42 +1570,6 @@ QLineEdit:focus{border:2px solid #3498DB;}</string>
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
-                <item>
-                 <widget class="QComboBox" name="roomId_6">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QComboBox{border-style:none;padding:5px;border-radius:5px; color:#FFFFFF;background:#3498DB;
-selection-background-color: #3498DB;
-}
-
-QComboBox:hover, QPushButton:hover
-{
-    color:#E5FEFF;background:#5DACE4
-}
-
-QComboBox::drop-down {
-color:#E5FEFF;background:#2980B9;
-    border-left-width: 0px;
-     border-left-style: solid; /* just a single line */
-     border-top-right-radius: 3px; /* same radius as the QComboBox */
-     border-bottom-right-radius: 3px;
-     padding-left: 10px;
-}
-
-QComboBox::down-arrow {
-    image: url(:/misc/down_arrow_2);
-}</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>-1</number>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <spacer name="horizontalSpacer_3">
                   <property name="orientation">
@@ -1793,7 +1584,7 @@ QComboBox::down-arrow {
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sectorQuery_2">
+                 <widget class="QPushButton" name="TripleAnalyse">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1867,7 +1658,7 @@ padding: 5px;
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>720</width>
+          <width>774</width>
           <height>718</height>
          </rect>
         </property>

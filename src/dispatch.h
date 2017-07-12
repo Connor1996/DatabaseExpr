@@ -41,7 +41,7 @@ public:
     vector<vector<QString>> SectorIdQuery(QString);
     vector<vector<QString>> SectorNameQuery(QString);
 
-    vector<QString> SectorId();
+    vector<vector<QString>> SectorId();
 
     // 基站eNodeB信息查询
     vector<vector<QString>> NodeIdQuery(QString);
@@ -53,7 +53,7 @@ public:
     // PRB信息统计与查询
     vector<vector<QString>> PRBQuery(QString, QDate, QDate);
 
-    vector<vector<QString>> C2Ianalyse();
+    vector<vector<QString>> C2IAnalyse();
 
     vector<vector<QString>> TripleAnalyse();
 private:

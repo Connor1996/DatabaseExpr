@@ -31,11 +31,10 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
         "DATABASE=%2;"
         "UID=%3;"
         "PWD=%4;")
-        .arg("XB-20170316TUZZ")
+        .arg(QSysInfo::machineHostName()) //XB-20170316TUZZ
         .arg("TD-LTE")
         .arg(name)
         .arg(password);
-    //qDebug() << QHostInfo::localHostName();
     db.setDatabaseName(dsn);
     return db.open();
 }
@@ -126,9 +125,9 @@ vector<vector<QString>> Dispatcher::SectorNameQuery(QString sectorName)
         .arg(sectorName));
 }
 
-vector<QString> Dispatcher::SectorId()
+vector<vector<QString>> Dispatcher::SectorId()
 {
-    return _ReadData(QString("select SECTOR_ID from tbCell"));
+    return _ReadData(QString("select SECTOR_NAME from tbCell"));
 }
 
 
@@ -148,7 +147,7 @@ vector<vector<QString>> Dispatcher::NodeNameQuery(QString nodeName)
 // KPI指标信息查询
 vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
 {
-    return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [RRC连接重建比率 (%)] from tbKPI where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 起始时间 asc, 小区1 asc")
+    return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [RRC连接重建比率 (%)] from tbKPI where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 小区1 asc, 起始时间 asc")
         .arg(netName)
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
@@ -158,7 +157,7 @@ vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, Q
 vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, QDate endDate)
 {
     _prepareforPRB();
-    return _ReadData(QString::fromLocal8Bit("select 网元名称, 起始时间, [第60个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] from tbPRBnew where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00'")
+    return _ReadData(QString::fromLocal8Bit("select 网元名称, 起始时间, [第60个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] from tbPRBnew where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 网元名称 asc, 起始时间 asc")
         .arg(netName)
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
@@ -321,7 +320,7 @@ bool Dispatcher::_prepareforPRB()
 
 }
 
-vector<vector<QString>> Dispatcher::C2Ianalyse()
+vector<vector<QString>> Dispatcher::C2IAnalyse()
 {
     _prepareforC2I();
     return _ReadData("exec dbo.RSRP_Prb_pro");
