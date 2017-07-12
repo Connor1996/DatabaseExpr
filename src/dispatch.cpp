@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <ctime>
 
+#include <QtNetwork\QHostInfo>
 #include <QMessageBox>
 #include <QApplication>
 #include <QtSql\QSqlError>
@@ -34,7 +35,7 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
         .arg("TD-LTE")
         .arg(name)
         .arg(password);
-
+    //qDebug() << QHostInfo::localHostName();
     db.setDatabaseName(dsn);
     return db.open();
 }
@@ -42,11 +43,12 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
 bool Dispatcher::ExportLast(QString filePath)
 {
 
-    qDebug() << query.lastQuery();
+    if (query.lastQuery() == "")
+        return false;
     // do last sql
     // and export
-    QString path = "C:\\Users\\Administrator\\Desktop\\test10";
-    return _ReadDatabase(query.lastQuery(),query.lastQuery(),path);
+
+    return _ReadDatabase(query.lastQuery(),query.lastQuery(), filePath);
 }
 
 

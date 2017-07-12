@@ -18,8 +18,6 @@ Management::Management(QWidget *parent) :
     ui->setupUi(this); 
     InitWidget();
     InitConnect();
-
-
 }
 
 Management::~Management()
@@ -34,7 +32,7 @@ void Management::InitWidget() {
 
 void Management::InitConnect() {
 
-    // 选择文件
+    // 选择文件路径
     connect(ui->chooseFilePath_Cell, &QPushButton::clicked, [this](){
         QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", "Excel Files(*.xlsx *.xls *.csv)");
         ui->importCellEdit->setText(path);
@@ -52,12 +50,22 @@ void Management::InitConnect() {
         ui->importMROEdit->setText(path);
     });
     connect(ui->chooseExportPath, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
+        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导出文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
         ui->exportFilePathEdit->setText(path);
+    });    
+    connect(ui->exportResult, &QPushButton::clicked, [this](){
+        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导出文件"), ".", tr("Excel Files(*.xlsx *.xls)"));
+        if (path.length() == 0)
+            return;
+
+        if (!_dispatcher.ExportLast(path))
+            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
+        else
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
+    /////////////////////////////////////////////
 
-
-    //
+    // 查询按钮
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
         if (ui->sectorIdEdit->text() != "") {
             _ShowTable([this](){
@@ -71,12 +79,9 @@ void Management::InitConnect() {
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
         }
     });
-
-
     connect(ui->sectorNameChoose, &QComboBox::currentTextChanged, [this](){
         ui->sectorNameEdit->setText(ui->sectorNameChoose->currentText());
     });
-
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
         if (ui->nodeIdEdit->text() != "") {
             _ShowTable([this](){
@@ -90,21 +95,21 @@ void Management::InitConnect() {
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入为空"));
         }
     });
-
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
         _ShowGraph([this](){
             return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),
                                         ui->startDate_KPI->date(), ui->endDate_KPI->date());
         });
     });
-
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
         _ShowGraph([this](){
             return _dispatcher.PRBQuery(ui->NetName_PRB->currentText(),
                                         ui->startDate_PRB->date(), ui->endDate_PRB->date());
         });
     });
+    ///////////////////////////////////////////
 
+    // 导入按钮
     connect(ui->importCell, &QPushButton::clicked, [this]() {
         if (ui->importCellEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
@@ -115,7 +120,6 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
-
     connect(ui->importKPI, &QPushButton::clicked, [this](){
         if (ui->importKPIEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
@@ -127,7 +131,6 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
-
     connect(ui->importPRB, &QPushButton::clicked, [this](){
         if (ui->importPRBEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
@@ -139,7 +142,6 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
-
     connect(ui->importMRO, &QPushButton::clicked, [this](){
         if (ui->importMROEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
@@ -151,16 +153,9 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
+    ///////////////////////////////////////////
 
-
-    connect(ui->exportResult, &QPushButton::clicked, [this](){
-
-        if (!_dispatcher.ExportLast(""))
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
-        else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
-    });
-
+    // 导出按钮
     connect(ui->exportTable, &QPushButton::clicked, [this](){
         if (ui->importPRBEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
@@ -172,7 +167,7 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
     });
-
+    ////////////////////////////////////////////
 
 }
 
@@ -233,21 +228,10 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
     barView->resize(600,600);
     barView->setFrameStyle(QFrame::NoFrame);
 
-
-
-    auto barChart = new QChart();
-    barChart->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    barChart->setAnimationOptions(QChart::SeriesAnimations);
-    barChart->setGeometry(10, 10, 500, 500);
-    auto axisX = new QBarCategoryAxis();
-    auto axisY = new QValueAxis();
-
-    axisY->setRange(0.0, 0.05);
-
     auto barSeries = new QBarSeries();
-    barChart->addSeries(barSeries);
-    barChart->setAxisY(axisY, barSeries);
-    barChart->setAxisX(axisX, barSeries);
+
+    auto axisX = new QBarCategoryAxis();
+
     bool mark = true;
     //构建 series，作为图表的数据源
     for (int i = 1; i < result.size(); ) {
@@ -255,18 +239,25 @@ void Management::_ShowGraph(function<vector<vector<QString>>(void)> fn)
         QString pre = result[i][0];
         while (i < result.size() && pre == result[i][0] ) {
             if (mark)
-                axisX->append(result[i][1]);
+                axisX->append(result[i][1].left(10));
             barSet->append(result[i][2].toFloat());
-            qDebug() << result[i][2] << result[i][2].toFloat();
+            qDebug() << result[i][0] << result[i][1] << result[i][2];
             i++;
         }
         mark = false;
         barSeries->append(barSet)    ;  // 将 series 添加至图表中
     }
 
+    auto barChart = new QChart();
+    barChart->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    barChart->setAnimationOptions(QChart::SeriesAnimations);
+    barChart->setGeometry(0, 0, 600, 600);
+    barChart->addSeries(barSeries);
+
+    barChart->createDefaultAxes();
+    barChart->setAxisX(axisX, barSeries);
 
     barChart->legend()->setAlignment(Qt::AlignBottom);
-    barChart->createDefaultAxes();
     barScene->addItem(barChart);
 
     ui->scrollArea->setWidget(barView);
