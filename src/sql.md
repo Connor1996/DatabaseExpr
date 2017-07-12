@@ -293,7 +293,6 @@ as
 	select @rslt = Prb6 from tbC2INew where ServingSector = @x and InterferingSector = @y and Prb6 >= 0.7
 	return @rslt
 	end
-
 ```
 
 ```sql
@@ -381,6 +380,61 @@ as
 		update tbMROData set LteScRSRP=@lsr, LteNcRSRP=@lnr, LteNcEarfcn=@lne, LteNcPci=@lnp;
 	else
 		insert into tbMROData select * from inserted;
+```
+
+## 索引补充
+
+```sql
+tbKPI表：
+create nonclustered index meta_name_index on tbKPI(网元名称)
+tbPRB表：
+create nonclustered index meta_name_index on tbPRB(起始时间)
+tbPRBnew
+create nonclustered index meta_name_index on tbPRBnew(网元名称)
+create nonclustered index date_index on tbPRBnew(日)
+create nonclustered index hour_index on tbPRBnew(时)
+tbMROData
+create clustered index SI_index on tbMROData(ServingSector, InterferingSector)
+tbC2INew
+create clustered index SI_index_new on tbC2INew(ServingSector, InterferingSector)
+create nonclustered index prb9_index on tbC2INew(Prb9)
+create nonclustered index prb6_index on tbC2INew(Prb6)
+```
+
+## 物理设计
+
+```sql
+创建数据库时指定主文件，文件组，辅文件，日志文件
+create database LTE_DB
+on primary //主文件
+(
+	name = 'LTE_DB_Primary',
+	filename = 'D:\lte_db.mdf',
+	size = 5mb,
+	maxsize = 10mb,
+	filegrowth = 1mb),
+filegroup Group_FG1 //文件组1，包括两个文件
+	(	name = 'LTE_FG1_Data1',
+		filename = 'D:\lte_fg1_data1.ndf',
+		size = 1mb,
+		maxsize = 10mb,
+		filegrowth = 1mb),
+	(	name = 'LTE_FG1_Data2',
+		filename = 'D:\lte_fg1_data2.ndf',
+		size = 1mb,
+		maxsize = 10mb,
+		filegrowth = 1mb)
+log on //日志文件
+(
+	name = 'LTE_log',
+	filename = 'D:\lte_log.ldf',
+	size = 1mb,
+	maxsize = 10mb,
+	filegrowth = 1mb
+);
+修改文件组
+alter database LTE_DB
+modify filegroup LTE_FG1 default
 ```
 
 
