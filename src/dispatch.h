@@ -61,6 +61,8 @@ private:
 
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
+    bool _prepareforPRB();
+
     QSqlQuery query;
 
 

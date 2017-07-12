@@ -149,7 +149,8 @@ vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, Q
 // PRB信息统计与查询
 vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, QDate endDate)
 {
-    return _ReadData(QString::fromLocal8Bit("select 网元名称, 日, 时, [第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)] as [第60个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)] from tbPRBnew where 网元名称 = %1 and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00'")
+    _prepareforPRB();
+    return _ReadData(QString::fromLocal8Bit("select 网元名称, 起始时间, [第60个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] from tbPRBnew where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00'")
         .arg(netName)
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
@@ -284,3 +285,29 @@ bool Dispatcher::_ReadDatabase(QString SQL, QString ssql, QString pathName)
     return result;
 }
 
+bool Dispatcher::_prepareforPRB()
+{
+    QString sql = QString::fromLocal8Bit("create table tbPRBnew ("
+                          " 网元名称 nvarchar(50),"
+                          " 起始时间 nvarchar(50),");
+    for(int i=0; i<99; i++)
+    {
+        sql += QString::fromLocal8Bit(" [第%1个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] float,").arg(QString::number(i,10));
+    }
+    sql += QString::fromLocal8Bit(" [第99个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] float)");
+    qDebug() << query.exec(sql);
+    sql.clear();
+    sql = QString::fromLocal8Bit("create procedure PRB_Hour_Pro"
+                  " as"
+                  " begin"
+                  " insert into tbPRBnew select 网元名称, 起始时间");
+    for(int i=0; i<100; i++)
+    {
+        sql += QString::fromLocal8Bit(", avg([第%1个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]) as [第%1个PRB上检测到的干扰噪声的平均值 (毫瓦分贝)]").arg(QString::number(i,10));
+    }
+    sql += QString::fromLocal8Bit(" from tbPRB group by 网元名称, 起始时间 order by 网元名称 asc, 起始时间 asc end");
+    qDebug() << query.exec(sql);
+    sql.clear();
+    sql = "exec dbo.PRB_Hour_pro";
+    return query.exec(sql);
+}
