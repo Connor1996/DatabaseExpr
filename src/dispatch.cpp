@@ -87,6 +87,8 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
     return _ReadDatabase(sql, ssql, filePath);
 }
 
+
+
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
 
@@ -154,9 +156,10 @@ vector<vector<QString>> Dispatcher::NodeNameQuery(QString nodeName)
 }
 
 // KPI指标信息查询
-vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, QDate endDate)
+vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QString index,QDate startDate, QDate endDate)
 {
-    return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [RRC连接重建比率 (%)] from tbKPI where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 小区1 asc, 起始时间 asc")
+    return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [%1] from tbKPI where 网元名称 = '%2' and 起始时间>='%3 00:00:00' and 起始时间<='%4 00:00:00' order by 小区1 asc, 起始时间 asc")
+        .arg(index)
         .arg(netName)
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
@@ -175,6 +178,12 @@ vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, Q
     _time = (double)(end - begin) / CLOCKS_PER_SEC;
 
     return result;
+}
+
+vector<vector<QString>> Dispatcher::TripleAnalyse()
+{
+    qDebug()<<_prepareforTriple();
+    return _ReadData("select * from tbC2I3");
 }
 
 bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int rows, QString table)
@@ -248,6 +257,13 @@ bool Dispatcher::__CheckData(QString tableName, QVariantList Item, int col)
         return true;
     }
     else if(tableName == "tbMROData"){
+        return true;
+    }
+    else if(tableName == "tbKPI"){
+        for(int j=0; j<col; j++){
+            if((j>4)&&Item[j].typeName()!=QString("double"))
+                return false;
+        }
         return true;
     }
     else
@@ -434,6 +450,9 @@ bool Dispatcher::_prepareforC2I()
     db.transaction();
     for(int i=1; i<vec.size(); i++)
     {
+        if (vec[i][2] == "NULL" || vec[i][3] == "NULL"
+                    || vec[i][2] == "null" || vec[i][3] == "null")
+            continue;
         mean = vec[i][2].toFloat(), std = vec[i][3].toFloat();
 
         double prb9, prb6;
@@ -454,7 +473,11 @@ bool Dispatcher::_prepareforC2I()
             prb9 = (1 + erf(inErf)) / 2;
             inErf = (6 - mean) / (std * radical2);
             prb6 = (1 + erf(inErf)) / 2;
+            inErf = (-6 - mean) / (std * radical2);
+            double prb_6 = (1 + erf(inErf)) / 2;
+            prb6 -= prb_6;
         }
+
         QString sql = QString("insert into tbC2INew values('%1','%2',%3,%4,%5,%6)")
                 .arg(vec[i][0])
                 .arg(vec[i][1])
@@ -469,11 +492,6 @@ bool Dispatcher::_prepareforC2I()
     return true;
 }
 
-vector<vector<QString>> Dispatcher::TripleAnalyse()
-{
-    qDebug()<<_prepareforTriple();
-    return _ReadData("select * from tbC2I3");
-}
 
 bool Dispatcher::_prepareforTriple()
 {
@@ -485,12 +503,21 @@ bool Dispatcher::_prepareforTriple()
                       ")");
     qDebug()<<query.exec(sql);
     sql.clear();
+    query.exec("truncate table tbC2I3");
+//    sql = QString("with SI(ServingSector, InterferingSector) as"
+//                  " ("
+//                      " (select ServingSector, InterferingSector from tbC2INew where Prb6 >= 0.7)"
+//                      " union"
+//                      " (select InterferingSector, ServingSector from tbC2INew where Prb6 >= 0.7)"
+//                  " )"
+//                  " insert into tbC2I3 select A.ServingSector as a, B.ServingSector as b, C.ServingSector as c from SI as A, SI as B, SI as C"
+//                      " where (A.InterferingSector = B.ServingSector and B.InterferingSector = C.ServingSector and C.InterferingSector = A.ServingSector"
+//                          " and A.ServingSector < A.InterferingSector and B.ServingSector < B.InterferingSector)");
+//
     sql = QString("with SI(ServingSector, InterferingSector) as"
                   " ("
                       " (select ServingSector, InterferingSector from tbC2INew where Prb6 >= 0.7)"
-                      " union"
-                      " (select InterferingSector, ServingSector from tbC2INew where Prb6 >= 0.7)"
-                  " )"
+                   " )"
                   " insert into tbC2I3 select A.ServingSector as a, B.ServingSector as b, C.ServingSector as c from SI as A, SI as B, SI as C"
                       " where (A.InterferingSector = B.ServingSector and B.InterferingSector = C.ServingSector and C.InterferingSector = A.ServingSector"
                           " and A.ServingSector < A.InterferingSector and B.ServingSector < B.InterferingSector)");

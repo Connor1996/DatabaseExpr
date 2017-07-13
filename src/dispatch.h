@@ -52,7 +52,7 @@ public:
     vector<vector<QString>> NodeNameQuery(QString);
 
     // KPI指标信息查询
-    vector<vector<QString>> KPIQuery(QString, QDate, QDate);
+    vector<vector<QString>> KPIQuery(QString, QString, QDate, QDate);
 
     // PRB信息统计与查询
     vector<vector<QString>> PRBQuery(QString, QDate, QDate);

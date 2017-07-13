@@ -102,7 +102,7 @@ void Management::InitConnect() {
     });
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
         _ShowBarGraph([this](){
-            return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),
+            return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),ui->NetName_KPI_3->currentText(),
                                         ui->startDate_KPI->date(), ui->endDate_KPI->date());
         });
     });
