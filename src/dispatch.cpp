@@ -42,19 +42,19 @@ bool Dispatcher::ConnectDatabase(QString name, QString password)
 bool Dispatcher::ExportLast(QString filePath)
 {
 
-    if (query.lastQuery() == "")
+    if (_lastquery == "")
         return false;
     // do last sql
     // and export
 
-    return _ReadDatabase(query.lastQuery(),query.lastQuery(), filePath);
+    return _ReadDatabase(_lastquery, _lastquery, filePath);
 }
 
 
 // tbCell导入
 bool Dispatcher::ImportCell(QString filePath)
 {
-    return _ReadExcel("test1", filePath);
+    return _ReadExcel("tbCell", filePath);
 }
 
 
@@ -89,12 +89,16 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
+
     clock_t begin = clock();
 
     vector<vector<QString>> result;
 
-    if (!query.exec(sql))
+    if (!query.exec(sql)) {
         qDebug() << "[ERROR]" << query.lastError().databaseText();
+        return result;
+    }
+
     int size = query.record().count();
     vector<QString> columnName;
     for (int i = 0; i < size; i++) {
@@ -109,10 +113,10 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
         }
         result.push_back(item);
     }
+    _lastquery = sql;
 
-    clock_t end = clock();
-    _time = (double)(end - begin) / CLOCKS_PER_SEC;
-    qDebug() << begin << end;
+    _time = (double)(clock() - begin) / CLOCKS_PER_SEC;
+
     return result;
 }
 
@@ -373,8 +377,9 @@ vector<vector<QString>> Dispatcher::C2IAnalyse()
 {
     clock_t begin = clock();
     _prepareforC2I();
-    auto result =  _ReadData("exec dbo.RSRP_Prb_pro");
+    auto result =  _ReadData("select * from tbC2INew where Prb9 is not null and Prb6 is not null");
     _time = (double)(clock() - begin) / CLOCKS_PER_SEC;
+    //_lastquery =  "select * from tbC2INew where Prb9 is not null and Prb6 is not null";
     return result;
 }
 
@@ -399,6 +404,7 @@ bool Dispatcher::_prepareforC2I()
     sql.clear();
     sql = QString("exec dbo.Calc_mean_std_pro");
     qDebug() << query.exec(sql);
+    /*
     sql = QString("create procedure RSRP_Prb_pro"
                   " as"
                       " begin"
@@ -406,20 +412,61 @@ bool Dispatcher::_prepareforC2I()
                           " insert into tbC2INew select ServingSector, InterferingSector, mean, std, 0, 0 from tbMROMean_Std"
                           " update tbC2INew set Prb9 = ("
                                   " case"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 5 and (9 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 5 and (9 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
                                   " end"
                               " ), Prb6 = ("
                                   " case"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 5 and (6 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 5 and (6 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not NULL and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
                                   " end"
                               " )"
-                          " select * from tbC2INew where Prb9 is not  and Prb6 is not "
+                          " select * from tbC2INew where Prb9 is not NULL and Prb6 is not NULL"
                       " end");
-    return query.exec(sql);
+    return query.exec(sql);*/
+
+    float mean, std, radical2, inErf;
+    auto vec = _ReadData("select * from tbMROMean_Std");
+    qDebug()<<query.exec("truncate table [TD-LTE].[dbo].[tbC2INew]");
+
+    db.transaction();
+    for(int i=0; i<vec.size(); i++)
+    {
+        mean = vec[i][2].toFloat(), std = vec[i][3].toFloat();
+
+        double prb9, prb6;
+        // tepan
+        if (std == 0) {
+            if (mean < 6)
+                prb6 = 1;
+            else
+                prb6 =0;
+            if (mean < 9)
+                prb9 = 1;
+            else
+                prb9 =0;
+        } else {
+
+            radical2 = pow(2, 1 / 2);
+            inErf = (9 - mean) / (std * radical2);
+            prb9 = (1 + erf(inErf)) / 2;
+            inErf = (6 - mean) / (std * radical2);
+            prb6 = (1 + erf(inErf)) / 2;
+        }
+        QString sql = QString("insert into tbC2INew values('%1','%2',%3,%4,%5,%6)")
+                .arg(vec[i][0])
+                .arg(vec[i][1])
+                .arg(mean)
+                .arg(std)
+                .arg(prb6)
+                .arg(prb9);
+
+        query.exec(sql);
+    }
+    db.commit();
+    return true;
 }
 
 vector<vector<QString>> Dispatcher::TripleAnalyse()

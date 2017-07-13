@@ -83,6 +83,8 @@ private:
 
     //连接数据库
     static QSqlDatabase db;
+
+    QString _lastquery;
 };
 
 #endif // DISPATCH_H
