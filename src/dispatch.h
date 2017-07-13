@@ -21,16 +21,7 @@ public:
     static bool ConnectDatabase(QString, QString);
 
     // tbCell导入
-    bool ImportCell(QString filePath);
-
-    // tbKPI导入
-    bool ImportKPI(QString filePath);
-
-    // tbPRB导入
-    bool ImportPRB(QString filePath);
-
-    // tbMROData导入
-    bool ImportMRO(QString filePath);
+    bool ImportCell(QString tableName, QString filePath);
 
     // 导出给定表
     bool ExportTable(QString, QString);

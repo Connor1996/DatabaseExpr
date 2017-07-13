@@ -51,31 +51,10 @@ bool Dispatcher::ExportLast(QString filePath)
 }
 
 
-// tbCell导入
-bool Dispatcher::ImportCell(QString filePath)
+// 导入给定表
+bool Dispatcher::ImportCell(QString tableName, QString filePath)
 {
-    return _ReadExcel("tbCell", filePath);
-}
-
-
-// tbKPI导入
-bool Dispatcher::ImportKPI(QString filePath)
-{
-    return _ReadExcel("tbKPI", filePath);
-}
-
-
-// tbPRB导入
-bool Dispatcher::ImportPRB(QString filePath)
-{
-    return _ReadExcel("tbPRB", filePath);
-}
-
-
-// tbMROData导入
-bool Dispatcher::ImportMRO(QString filePath)
-{
-    return _ReadExcel("tbMROData", filePath);
+    return _ReadExcel(tableName, filePath);
 }
 
 
@@ -455,6 +434,10 @@ bool Dispatcher::_prepareforC2I()
             inErf = (6 - mean) / (std * radical2);
             prb6 = (1 + erf(inErf)) / 2;
         }
+
+        if (prb6 == 0 || prb9 == 0)
+            continue;
+
         QString sql = QString("insert into tbC2INew values('%1','%2',%3,%4,%5,%6)")
                 .arg(vec[i][0])
                 .arg(vec[i][1])

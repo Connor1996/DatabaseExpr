@@ -42,22 +42,7 @@ void Management::InitConnect() {
         QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", "Excel Files(*.xlsx *.xls *.csv)");
         ui->importCellEdit->setText(path);
     });
-    connect(ui->chooseFilePath_KPI, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
-        ui->importKPIEdit->setText(path);
-    });
-    connect(ui->chooseFilePath_PRB, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
-        ui->importPRBEdit->setText(path);
-    });
-    connect(ui->chooseFilePath_MRO, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getOpenFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
-        ui->importMROEdit->setText(path);
-    });
-    connect(ui->chooseExportPath, &QPushButton::clicked, [this](){
-        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导出文件"), ".", tr("Excel Files(*.xlsx *.xls *.csv)"));
-        ui->exportFilePathEdit->setText(path);
-    });    
+
     connect(ui->exportResult, &QPushButton::clicked, [this](){
         QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导出文件"), ".", tr("Excel Files(*.xlsx *.xls)"));
         if (path.length() == 0)
@@ -89,6 +74,15 @@ void Management::InitConnect() {
     });
     connect(ui->eNodeQuery, &QPushButton::clicked, [this](){
         if (ui->nodeIdEdit->text() != "") {
+            bool ok;
+            ui->nodeIdEdit->text().toInt(&ok);
+            if (!ok)
+               {
+                QMessageBox::warning(this, "error", QString::fromLocal8Bit("输入不为整数"));
+                return;
+            }
+
+
             _ShowTable([this](){
                 return _dispatcher.NodeIdQuery(ui->nodeIdEdit->text());
             });
@@ -120,44 +114,12 @@ void Management::InitConnect() {
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
             return;
         }
-        if (!_dispatcher.ImportCell(ui->importCellEdit->text()))
+        if (!_dispatcher.ImportCell(ui->tableName_2->currentText(), ui->importCellEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
-    connect(ui->importKPI, &QPushButton::clicked, [this](){
-        if (ui->importKPIEdit->text() == ""){
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
-            return;
-        }
 
-        if (!_dispatcher.ImportKPI(ui->importKPIEdit->text()))
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
-        else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
-    });
-    connect(ui->importPRB, &QPushButton::clicked, [this](){
-        if (ui->importPRBEdit->text() == ""){
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
-            return;
-        }
-
-        if (!_dispatcher.ImportPRB(ui->importPRBEdit->text()))
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
-        else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
-    });
-    connect(ui->importMRO, &QPushButton::clicked, [this](){
-        if (ui->importMROEdit->text() == ""){
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
-            return;
-        }
-
-        if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
-            QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
-        else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
-    });
     ///////////////////////////////////////////
 
     // 导出按钮
