@@ -427,12 +427,12 @@ bool Dispatcher::_prepareforC2I()
                       " end");
     return query.exec(sql);*/
 
-    float mean, std, radical2, inErf;
+    double mean, std, radical2, inErf;
     auto vec = _ReadData("select * from tbMROMean_Std");
     qDebug()<<query.exec("truncate table [TD-LTE].[dbo].[tbC2INew]");
 
     db.transaction();
-    for(int i=0; i<vec.size(); i++)
+    for(int i=1; i<vec.size(); i++)
     {
         mean = vec[i][2].toFloat(), std = vec[i][3].toFloat();
 

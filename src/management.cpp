@@ -162,12 +162,12 @@ void Management::InitConnect() {
 
     // 导出按钮
     connect(ui->exportTable, &QPushButton::clicked, [this](){
-        if (ui->importPRBEdit->text() == ""){
+        if (ui->exportFilePathEdit->text() == ""){
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("文件路径为空"));
             return;
         }
 
-        if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->importPRBEdit->text()))
+        if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->exportFilePathEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
@@ -263,7 +263,7 @@ void Management::_ShowBarGraph(function<vector<vector<QString>>(void)> fn)
     auto barChart = new QChart();
     barChart->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     barChart->setAnimationOptions(QChart::SeriesAnimations);
-    barChart->resize(700, 700);
+    barChart->resize(680, 700);
     barChart->addSeries(barSeries);
 
     barChart->createDefaultAxes();
@@ -306,14 +306,14 @@ void Management::_ShowLineGraph(function<vector<vector<QString>>(void)> fn)
     auto lineChart = new QChart();
     lineChart->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lineChart->setAnimationOptions(QChart::SeriesAnimations);
-    lineChart->resize(700, 700);
+    lineChart->resize(680, 700);
     lineChart->addSeries(lineSeries);
 
     lineChart->createDefaultAxes();
     lineChart->setAxisX(axisX, lineSeries);
 
     auto axisY = new QValueAxis();
-    axisY->setRange(-114, -118);
+    axisY->setRange(-114, -125);
     lineChart->setAxisY(axisY, lineSeries);
 
     lineChart->legend()->setVisible(false);
