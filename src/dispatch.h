@@ -37,6 +37,10 @@ public:
 
     bool ExportLast(QString);
 
+    double GetLastTime() {
+        return _time;
+    }
+
     // 小区配置信息查询
     vector<vector<QString>> SectorIdQuery(QString);
     vector<vector<QString>> SectorNameQuery(QString);
@@ -63,8 +67,6 @@ private:
 
     bool _ReadExcel(QString, QString);
 
-    //QString _WriteSQL(QString);
-
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
     bool __CheckData(QString, QVariantList, int);
@@ -77,6 +79,7 @@ private:
 
     QSqlQuery query;
 
+    double _time;
 
     //连接数据库
     static QSqlDatabase db;

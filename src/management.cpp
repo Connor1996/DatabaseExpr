@@ -66,7 +66,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ExportLast(path))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     /////////////////////////////////////////////
 
@@ -123,7 +123,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ImportCell(ui->importCellEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     connect(ui->importKPI, &QPushButton::clicked, [this](){
         if (ui->importKPIEdit->text() == ""){
@@ -134,7 +134,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ImportKPI(ui->importKPIEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     connect(ui->importPRB, &QPushButton::clicked, [this](){
         if (ui->importPRBEdit->text() == ""){
@@ -145,7 +145,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ImportPRB(ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     connect(ui->importMRO, &QPushButton::clicked, [this](){
         if (ui->importMROEdit->text() == ""){
@@ -156,7 +156,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ImportMRO(ui->importMROEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导入失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     ///////////////////////////////////////////
 
@@ -170,7 +170,7 @@ void Management::InitConnect() {
         if (!_dispatcher.ExportTable(ui->tableName->currentText(), ui->importPRBEdit->text()))
             QMessageBox::warning(this, "error", QString::fromLocal8Bit("导出失败"));
         else
-            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入成功"));
+            QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
     ////////////////////////////////////////////
 
@@ -190,6 +190,7 @@ void Management::InitConnect() {
 void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
+    ui->time->setText(QString::number(_dispatcher.GetLastTime()) + "s");
     ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
@@ -224,7 +225,8 @@ void Management::_ShowTable(function<vector<vector<QString>>(void)> fn)
 void Management::_ShowBarGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-
+    qDebug() << _dispatcher.GetLastTime();
+    ui->time->setText(QString::number(_dispatcher.GetLastTime()) + "s");
     ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
@@ -252,11 +254,10 @@ void Management::_ShowBarGraph(function<vector<vector<QString>>(void)> fn)
             if (mark)
                 axisX->append(result[i][1].left(10));
             barSet->append(result[i][2].toFloat());
-            qDebug() << result[i][0] << result[i][1] << result[i][2];
             i++;
         }
         mark = false;
-        barSeries->append(barSet)    ;  // 将 series 添加至图表中
+        barSeries->append(barSet);  // 将 series 添加至图表中
     }
 
     auto barChart = new QChart();
@@ -277,13 +278,13 @@ void Management::_ShowBarGraph(function<vector<vector<QString>>(void)> fn)
 void Management::_ShowLineGraph(function<vector<vector<QString>>(void)> fn)
 {
     const auto& result = fn();
-
+    ui->time->setText(QString::number(_dispatcher.GetLastTime()) + "s");
     ui->count->setText(QString::number(result.size() - 1));
     // 判断是否已经有widget，有则删除
     if(ui->scrollArea->widget() != 0)
         delete ui->scrollArea->widget();
 
-    // 柱状图
+    // 折线图
     auto lineScene = new QGraphicsScene();
     auto lineView = new QGraphicsView();
     lineView->setScene(lineScene);
@@ -294,17 +295,12 @@ void Management::_ShowLineGraph(function<vector<vector<QString>>(void)> fn)
     auto lineSeries = new QLineSeries();
 
     auto axisX = new QDateTimeAxis();
-    axisX->setFormat("MM-dd-yyyy");
-    bool mark = true;
+    axisX->setFormat("MM-dd-yyyy hh");
+
     //构建 series，作为图表的数据源
-    for (int i = 1; i < result.size(); ) {
-        QString pre = result[i][0];
-        while (i < result.size() && pre == result[i][0] ) {
-            lineSeries->append(QDateTime::fromString(result[i][1], "MM/dd/yyyy hh:mm:ss").toMSecsSinceEpoch(), result[i][2].toFloat());
-            qDebug() << result[i][0] << result[i][1] << result[i][2];
-            i++;
-        }
-        mark = false;
+    for (int i = 1; i < result.size(); i++) {
+        lineSeries->append(QDateTime::fromString(result[i][1], "MM/dd/yyyy hh:mm:ss").toMSecsSinceEpoch(), result[i][2].toFloat());
+
     }
 
     auto lineChart = new QChart();
@@ -320,7 +316,7 @@ void Management::_ShowLineGraph(function<vector<vector<QString>>(void)> fn)
     axisY->setRange(-114, -118);
     lineChart->setAxisY(axisY, lineSeries);
 
-    lineChart->legend()->setAlignment(Qt::AlignBottom);
+    lineChart->legend()->setVisible(false);
     lineScene->addItem(lineChart);
 
     ui->scrollArea->setWidget(lineView);

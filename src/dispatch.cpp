@@ -89,6 +89,8 @@ bool Dispatcher::ExportTable(QString tableName, QString filePath)
 
 vector<vector<QString>> Dispatcher::_ReadData(QString sql)
 {
+    clock_t begin = clock();
+
     vector<vector<QString>> result;
 
     if (!query.exec(sql))
@@ -108,6 +110,9 @@ vector<vector<QString>> Dispatcher::_ReadData(QString sql)
         result.push_back(item);
     }
 
+    clock_t end = clock();
+    _time = (double)(end - begin) / CLOCKS_PER_SEC;
+    qDebug() << begin << end;
     return result;
 }
 
@@ -156,11 +161,16 @@ vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QDate startDate, Q
 // PRB信息统计与查询
 vector<vector<QString>> Dispatcher::PRBQuery(QString netName, QDate startDate, QDate endDate)
 {
+    clock_t begin = clock();
     _prepareforPRB();
-    return _ReadData(QString::fromLocal8Bit("select 网元名称, 起始时间, [第60个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] from tbPRBnew where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 网元名称 asc, 起始时间 asc")
+    auto result = _ReadData(QString::fromLocal8Bit("select 网元名称, 起始时间, [第60个PRB上检测到的干扰噪声的平均值(毫瓦分贝)] from tbPRBnew where 网元名称 = '%1' and 起始时间>='%2 00:00:00' and 起始时间<='%3 00:00:00' order by 网元名称 asc, 起始时间 asc")
         .arg(netName)
         .arg(startDate.toString("MM/dd/yyyy"))
         .arg(endDate.toString("MM/dd/yyyy")));
+    clock_t end = clock();
+    _time = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    return result;
 }
 
 bool Dispatcher::__ImportDatabase(QAxObject *worksheet, int start, int end, int rows, QString table)
@@ -242,6 +252,8 @@ bool Dispatcher::__CheckData(QString tableName, QVariantList Item, int col)
 
 bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
 {
+    clock_t begin = clock();
+
     QAxObject *excel = NULL;
     QAxObject *workbooks = NULL;
     QAxObject *workbook = NULL;
@@ -274,11 +286,16 @@ bool Dispatcher::_ReadExcel(QString tableName, QString fileName)
     }
     bool result = __ImportDatabase(worksheet, count, intRows, intCols, tableName);
     workbooks->dynamicCall("Close()");
+
+    _time = (double)(clock() - begin) / CLOCKS_PER_SEC;
+
     return result;
 }
 
 bool Dispatcher::_ReadDatabase(QString SQL, QString ssql, QString pathName)
 {
+    clock_t begin = clock();
+
     QAxObject *excel = NULL;
     QAxObject *workbooks = NULL;
     QAxObject *workbook = NULL;
@@ -319,6 +336,8 @@ bool Dispatcher::_ReadDatabase(QString SQL, QString ssql, QString pathName)
     bool result = query.exec(sql);
     delete excel;
 
+    _time = (double)(clock() - begin) / CLOCKS_PER_SEC;
+
     return result;
 }
 
@@ -352,8 +371,11 @@ bool Dispatcher::_prepareforPRB()
 
 vector<vector<QString>> Dispatcher::C2IAnalyse()
 {
+    clock_t begin = clock();
     _prepareforC2I();
-    return _ReadData("exec dbo.RSRP_Prb_pro");
+    auto result =  _ReadData("exec dbo.RSRP_Prb_pro");
+    _time = (double)(clock() - begin) / CLOCKS_PER_SEC;
+    return result;
 }
 
 bool Dispatcher::_prepareforC2I()
@@ -384,18 +406,18 @@ bool Dispatcher::_prepareforC2I()
                           " insert into tbC2INew select ServingSector, InterferingSector, mean, std, 0, 0 from tbMROMean_Std"
                           " update tbC2INew set Prb9 = ("
                                   " case"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 5 and (9 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
-                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 5 and (9 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((9 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb9 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (9 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
                                   " end"
                               " ), Prb6 = ("
                                   " case"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 5 and (6 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
-                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not null and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 5 and (6 - tbC2INew.mean)/tbC2INew.std >= 0 then (select prb from tbNormStatistics where tbNormStatistics.id = round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std < 0 then 1 - (select prb from tbNormStatistics where tbNormStatistics.id = abs(round((6 - tbC2INew.mean)/tbC2INew.std, 2, 0)) * 100)"
+                                  " when tbC2INew.Prb6 = 0 and tbC2INew.std is not  and tbC2INew.std != 0 and (6 - tbC2INew.mean)/tbC2INew.std >= 5 then 1 "
                                   " end"
                               " )"
-                          " select * from tbC2INew where Prb9 is not null and Prb6 is not null"
+                          " select * from tbC2INew where Prb9 is not  and Prb6 is not "
                       " end");
     return query.exec(sql);
 }
