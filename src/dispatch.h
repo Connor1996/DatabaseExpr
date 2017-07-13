@@ -67,6 +67,8 @@ private:
 
     bool __ImportDatabase(QAxObject *, int, int, int, QString);
 
+    bool __CheckData(QString, QVariantList, int);
+
     bool _prepareforPRB();
 
     bool _prepareforC2I();
