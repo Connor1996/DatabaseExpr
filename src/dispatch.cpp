@@ -386,29 +386,14 @@ bool Dispatcher::_prepareforTriple()
                       ")");
     qDebug()<<query.exec(sql);
     sql.clear();
-    sql = QString("create function Prb6GE70(@x varchar(50), @y varchar(50))"
-                  " returns float"
-                  " as"
-                      " begin"
-                      " declare @rslt float"
-                      " set @rslt = 0"
-                      " select @rslt = Prb6 from tbC2INew where ServingSector = @x and InterferingSector = @y and Prb6 >= 0.7"
-                      " return @rslt"
-                      " end");
-    qDebug()<<query.exec(sql);
-    sql.clear();
-    sql = QString("with sa (ServingSector, InterferingSector) as ("
-                  " select ServingSector, InterferingSector from tbC2INew"
-                  " ),"
-               " sb (ServingSector, InterferingSector) as ("
-                  " select ServingSector, InterferingSector from tbC2INew"
-                  " ),"
-               " sc (ServingSector, InterferingSector) as ("
-                  " select ServingSector, InterferingSector from tbC2INew"
+    sql = QString("with SI(ServingSector, InterferingSector) as"
+                  " ("
+                      " (select ServingSector, InterferingSector from tbC2INew where Prb6 >= 0.7)"
+                      " union"
+                      " (select InterferingSector, ServingSector from tbC2INew where Prb6 >= 0.7)"
                   " )"
-              " insert into tbC2I3 select sa.ServingSector as a, sb.ServingSector as b, sc.ServingSector as c from  sa, sb, sc where sa.ServingSector != sb.ServingSector and sb.ServingSector!=sc.ServingSector and sc.ServingSector != sa.ServingSector"
-                  " and ((select dbo.Prb6GE70(sa.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sa.ServingSector)) != 0 )"
-                  " and ((select dbo.Prb6GE70(sa.ServingSector, sc.ServingSector)) != 0 or (select dbo.Prb6GE70(sc.ServingSector, sa.ServingSector)) != 0 )"
-                  " and ((select dbo.Prb6GE70(sc.ServingSector, sb.ServingSector)) != 0 or (select dbo.Prb6GE70(sb.ServingSector, sc.ServingSector)) != 0 )");
+                  " insert into tbC2I3 select A.ServingSector as a, B.ServingSector as b, C.ServingSector as c from SI as A, SI as B, SI as C"
+                      " where (A.InterferingSector = B.ServingSector and B.InterferingSector = C.ServingSector and C.InterferingSector = A.ServingSector"
+                          " and A.ServingSector < A.InterferingSector and B.ServingSector < B.InterferingSector)");
     return query.exec(sql);
 }
