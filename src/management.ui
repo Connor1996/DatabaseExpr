@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1328</width>
-    <height>812</height>
+    <height>846</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -75,7 +75,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -819,6 +819,141 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_53">
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetMinAndMaxSize</enum>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_35">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="text">
+                   <string>  指标  </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="NetName_KPI_3">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QComboBox{border-style:none;padding:5px;border-radius:5px; color:#FFFFFF;background:#3498DB;
+selection-background-color: #3498DB;
+}
+
+QComboBox:hover, QPushButton:hover
+{
+    color:#E5FEFF;background:#5DACE4
+}
+
+QComboBox::drop-down {
+color:#E5FEFF;background:#2980B9;
+    border-left-width: 0px;
+     border-left-style: solid; /* just a single line */
+     border-top-right-radius: 3px; /* same radius as the QComboBox */
+     border-bottom-right-radius: 3px;
+     padding-left: 10px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/misc/down_arrow_2);
+}</string>
+                  </property>
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>RRC连接建立完成次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>RRC连接请求次数（包括重发） (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>RRC建立成功率qf (%)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>E-RAB建立成功总次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>E-RAB建立尝试总次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>E-RAB建立成功率2 (%)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>eNodeB触发的E-RAB异常释放总次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>小区切换出E-RAB异常释放总次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>E-RAB掉线率(新) (%)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>无线接通率ay (%)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>eNodeB发起的S1 RESET导致的UE Context释放次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>UE Context异常释放次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>UE Context建立成功总次数 (无)</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>新建项目</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_18">
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
@@ -1271,6 +1406,19 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <spacer name="horizontalSpacer_27">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </item>
              </layout>
@@ -1296,6 +1444,32 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinAndMaxSize</enum>
                 </property>
+                <item>
+                 <spacer name="horizontalSpacer_26">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox">
+                  <property name="decimals">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.100000000000000</double>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <spacer name="horizontalSpacer_3">
                   <property name="orientation">
@@ -1328,6 +1502,19 @@ QPushButton:hover{color:#FFF5E7;background:#EC7064;}QPushButton:pressed{color:#F
                    <string>  分析  </string>
                   </property>
                  </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_28">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1384,8 +1571,8 @@ padding: 5px;
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>774</width>
-          <height>718</height>
+          <width>666</width>
+          <height>752</height>
          </rect>
         </property>
        </widget>

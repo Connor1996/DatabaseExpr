@@ -43,14 +43,14 @@ public:
     vector<vector<QString>> NodeNameQuery(QString);
 
     // KPI指标信息查询
-    vector<vector<QString>> KPIQuery(QString, QDate, QDate);
+    vector<vector<QString>> KPIQuery(QString, QString, QDate, QDate);
 
     // PRB信息统计与查询
-    vector<vector<QString>> PRBQuery(QString, QDate, QDate);
+    vector<vector<QString>> PRBQuery(QString, QDateTime, QDateTime);
 
     vector<vector<QString>> C2IAnalyse();
 
-    vector<vector<QString>> TripleAnalyse();
+    vector<vector<QString>> TripleAnalyse(double rate);
 private:
     vector<vector<QString>> _ReadData(QString);
 
@@ -66,7 +66,7 @@ private:
 
     bool _prepareforC2I();
 
-    bool _prepareforTriple();
+    bool _prepareforTriple(double rate);
 
     QSqlQuery query;
 

@@ -96,14 +96,14 @@ void Management::InitConnect() {
     });
     connect(ui->KPIQuery, &QPushButton::clicked, [this](){
         _ShowBarGraph([this](){
-            return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),
+            return _dispatcher.KPIQuery(ui->NetName_KPI->currentText(),ui->NetName_KPI_3->currentText(),
                                         ui->startDate_KPI->date(), ui->endDate_KPI->date());
         });
     });
     connect(ui->PRBQuery, &QPushButton::clicked, [this](){
         _ShowLineGraph([this](){
             return _dispatcher.PRBQuery(ui->NetName_PRB->currentText(),
-                                        ui->startDate_PRB->date(), ui->endDate_PRB->date());
+                                        ui->startDate_PRB->dateTime(), ui->endDate_PRB->dateTime());
         });
     });
     ///////////////////////////////////////////
@@ -144,7 +144,7 @@ void Management::InitConnect() {
 
     connect(ui->TripleAnalyse, &QPushButton::clicked, [this](){
         _ShowTable([this](){
-            return _dispatcher.TripleAnalyse();
+            return _dispatcher.TripleAnalyse(ui->doubleSpinBox->value());
         });
     });
 }
