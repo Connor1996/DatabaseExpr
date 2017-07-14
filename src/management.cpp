@@ -43,6 +43,11 @@ void Management::InitConnect() {
         ui->importCellEdit->setText(path);
     });
 
+    connect(ui->chooseExportPath, &QPushButton::clicked, [this](){
+        QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导入文件"), ".", "Excel Files(*.xlsx *.xls *.csv)");
+        ui->exportFilePathEdit->setText(path);
+    });
+
     connect(ui->exportResult, &QPushButton::clicked, [this](){
         QString path = QFileDialog::getSaveFileName(this, QString::fromLocal8Bit("选择导出文件"), ".", tr("Excel Files(*.xlsx *.xls)"));
         if (path.length() == 0)
@@ -53,7 +58,6 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
-    /////////////////////////////////////////////
 
     // 查询按钮
     connect(ui->sectorQuery, &QPushButton::clicked, [this](){
@@ -106,7 +110,6 @@ void Management::InitConnect() {
                                         ui->startDate_PRB->dateTime(), ui->endDate_PRB->dateTime());
         });
     });
-    ///////////////////////////////////////////
 
     // 导入按钮
     connect(ui->importCell, &QPushButton::clicked, [this]() {
@@ -120,7 +123,6 @@ void Management::InitConnect() {
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
 
-    ///////////////////////////////////////////
 
     // 导出按钮
     connect(ui->exportTable, &QPushButton::clicked, [this](){
@@ -134,7 +136,6 @@ void Management::InitConnect() {
         else
             QMessageBox::information(this, "info", QString::fromLocal8Bit("导入完成"));
     });
-    ////////////////////////////////////////////
 
     connect(ui->C2IAnalyse, &QPushButton::clicked, [this](){
         _ShowTable([this](){

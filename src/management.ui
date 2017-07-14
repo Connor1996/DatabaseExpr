@@ -75,7 +75,7 @@
 QFrame{background-color: rgb(255, 255, 255);}</string>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1021,6 +1021,11 @@ QComboBox::down-arrow {
                   </item>
                   <item>
                    <property name="text">
+                    <string>三门峡义马中澜化工-HLHF</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
                     <string>三门峡义马电视台-HLHF</string>
                    </property>
                   </item>
@@ -1571,7 +1576,7 @@ padding: 5px;
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>666</width>
+          <width>667</width>
           <height>752</height>
          </rect>
         </property>

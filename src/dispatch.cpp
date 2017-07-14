@@ -137,6 +137,12 @@ vector<vector<QString>> Dispatcher::NodeNameQuery(QString nodeName)
 // KPI指标信息查询
 vector<vector<QString>> Dispatcher::KPIQuery(QString netName, QString index,QDate startDate, QDate endDate)
 {
+    QString sql = QString::fromLocal8Bit("select 小区1, 起始时间, [%1] from tbKPI where 网元名称 = '%2' and 起始时间>='%3 00:00:00' and 起始时间<='%4 00:00:00' order by 小区1 asc, 起始时间 asc")
+            .arg(index)
+            .arg(netName)
+            .arg(startDate.toString("MM/dd/yyyy"))
+            .arg(endDate.toString("MM/dd/yyyy"));
+    qDebug()<<sql;
     return _ReadData(QString::fromLocal8Bit("select 小区1, 起始时间, [%1] from tbKPI where 网元名称 = '%2' and 起始时间>='%3 00:00:00' and 起始时间<='%4 00:00:00' order by 小区1 asc, 起始时间 asc")
         .arg(index)
         .arg(netName)
